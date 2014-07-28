@@ -1,0 +1,6 @@
+{"markers":[
+	{ "latitude":-5.742178, "longitude":-35.262627, "title":"Angered", "content":"Representing :)" },
+	{ "latitude":-5.746285, "longitude":-35.262418, "title":"Gothenburg", "content":"Swedens second largest city" }
+]}
+
+<iframe  frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com.br/maps?f=d&amp;source=s_d&amp;saddr=-5.7389811,-35.26379450000002&amp;daddr=-5.742178,-35.262627+to:-5.746285,-35.262418+to:-5.74758,-35.258091+to:-5.750291,-35.254174&amp;hl=pt-BR&amp;geocode=FRtuqP8dzerl_Q%3BFZ5hqP8dXe_l_Q%3BFZNRqP8dLvDl_Q%3BFYRMqP8dFQHm_Q&amp;aq=&amp;sll=-5.745626,-35.259204&amp;sspn=0.008732,0.013078&amp;mra=ls&amp;ie=UTF8&amp;ll=-5.745626,-35.259204&amp;spn=0.00855,0.005758&amp;t=m&amp;output=embed" style="border: 7px solid #2a3333; border-radius: 3px; height:600px " class="span12"></iframe>

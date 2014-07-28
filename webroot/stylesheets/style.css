@@ -1,0 +1,65 @@
+.tdlista{
+	right: ;
+	wid	
+}
+.cor-fundo{    
+	background-color:#333;	  
+}
+.cor-fundo2{    
+	background-color:#CFCFCF;	  
+}
+.cor-fundo1{	
+	background-color:#E7A547;
+}
+.al-central{
+		text-align: center;
+}
+.al-central-add{	
+	border-color: #fff;
+	text-align: center;
+}
+.al-left{
+	text-align: left;
+	margin-left: 330px;	
+}
+.al-right{
+	text-align: right;
+	margin-right: 300px;
+}
+.aviso1{
+	text-align: center;
+	color: red;
+}
+.aviso2{
+	text-align: center;
+	color:#EFD100;
+}
+.strong-aline{
+	text-align: left;
+}
+.ipt-aline{
+	text-align: right;
+}
+.aline-center{
+	text-align: center;
+}
+.alt-cor1{
+	background-color: #E7A547;
+	width:100% ;
+}
+.titulo-1{	
+	background-color: #E7A547;
+}
+.cor1{
+	color: black;
+}
+
+/*espamentos*/
+
+.sp-1{
+	text-align: left;
+}
+
+
+
+
