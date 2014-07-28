@@ -76,23 +76,23 @@
         </div>
 
         <hr class="divider" style="margin-top: 60px">
-        <div class="sparkline-box side">
+        <!-- <div class="sparkline-box side">
             <div class="sparkline-row">
                 <h4 class="gray"><span>Orders</span> 847</h4>
-                <div class="sparkline big" data-color="gray"><!--28,11,24,24,8,20,26,22,16,6,12,15--></div>
+                <div class="sparkline big" data-color="gray">28,11,24,24,8,20,26,22,16,6,12,15</div>
             </div>
             <hr class="divider">
             <div class="sparkline-row">
                 <h4 class="dark-green"><span>Income</span> $43.330</h4>
-                <div class="sparkline big" data-color="darkGreen"><!--16,20,6,19,25,22,9,13,7,10,15,4--></div>
+                <div class="sparkline big" data-color="darkGreen">16,20,6,19,25,22,9,13,7,10,15,4</div>
             </div>
             <hr class="divider">
             <div class="sparkline-row">
                 <h4 class="blue"><span>Reviews</span> 223</h4>
-                <div class="sparkline big" data-color="blue"><!--20,18,21,17,5,7,29,9,8,14,23,8--></div>
+                <div class="sparkline big" data-color="blue">20,18,21,17,5,7,29,9,8,14,23,8</div>
             </div>
             <hr class="divider">
-        </div>
+        </div> -->
     </div>
 </div>
 <!-- FIM CHARTS MENU VERTICAL -->
