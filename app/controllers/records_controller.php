@@ -1005,7 +1005,7 @@
 			$dao 	= new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
 			$total = 0;
-			echo '<div class="well" align="center">';
+			/*echo '<div class="well" align="center">';
 			echo '<table class="table table-normal responsive">';
 				echo'<thead>
 						<tr >
@@ -1014,7 +1014,7 @@
 						</tr>
 					</thead>
 				';
-				echo '<tbody>';
+				echo '<tbody>';*/
 					foreach ($Users as  $usuario) 
 					{	
 						$nome = "";
@@ -1035,14 +1035,15 @@
 							$nome = " ";
 						}
 						$count = $this->nowRegisterForUser($usuario->id);
-						echo '<tr>';
-							echo '<td align="left" style=" font-size:1.2em;" >'.$nome. '</td>';
-							echo '<td align="right" style=" font-size:1.2em;text-align:center" >'.$count.'</td>';
-						echo '</tr>';
+						//echo '<tr>';
+							//echo '<td align="left" style=" font-size:1.2em;" >'.$nome. '</td>';
+							echo '<li><span class=""><strong style="height:100px">'.$nome. '</strong>&nbsp;&nbsp;&nbsp;&nbsp;'.$count.'</span></li>';
+							//echo '<td align="right" style=" font-size:1.2em;text-align:center" >'.$count.'</td>';
+						//echo '</tr>';
 					}
-				echo '</tbody>';
+				/*echo '</tbody>';
 			echo '</table>';
-			echo '</div>';
+			echo '</div>';*/
 		}
 	
 		public function nowRegisterForUser($userId)
@@ -1059,30 +1060,30 @@
 
 					if ($var == "ENTRADA")
 					{
-						return '<span class="label label-success" title="Registro de Entrada" OnMouseOver="this.style.cursor=\'pointer\';" ><i class="icon-arrow-up"></i></span>';
+						return '<span class="label label-success" title="Registro de Entrada" OnMouseOver="this.style.cursor=\'pointer\';" ><i class="icon-arrow-up"></i> ENTRADA</span>';
 					}
 					elseif($var == "INTERVALO")
 					{
-						return '<span class="label label-gray" title="Registro de Saida para Intervalo" OnMouseOver="this.style.cursor=\'pointer\';" ><i class="icon-arrow-down"></i></span>';
+						return '<span class="label label-gray" title="Registro de Saida para Intervalo" OnMouseOver="this.style.cursor=\'pointer\';" ><i class="icon-arrow-down"></i> INTERVALO</span>';
 					}
 					elseif($var == "RETORNO")
 					{
-						return '<span class="label label-info" title="Registro de Retorno de Interval" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-up"></i></span>';
+						return '<span class="label label-info" title="Registro de Retorno de Interval" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-up"></i> RETORNO INTERVALO</span>';
 					}
 					elseif($var == "SAIDA")
 					{
-						return '<span class="label label-important" title="Registro de Saida" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-down"></i></span>';
+						return '<span class="label label-important" title="Registro de Saida" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-down"></i> SAIDA</span>';
 					}
 					elseif($var == "EXTRA-INICIO")
 					{
-						return '<span class="label label-warning" title="Registro de Inicio de Hora Extra" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-up"></i></span>';
+						return '<span class="label label-warning" title="Registro de Inicio de Hora Extra" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-up"></i> INICIO EXTRA</span>';
 					}
 					elseif($var == "EXTRA-FIM")
 					{
-						return '<span class="label" title="Registro de Saida de Hora Extra" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-down"></i></span>';
+						return '<span class="label" title="Registro de Saida de Hora Extra" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-down"></i> FIM EXTRA</span>';
 					}	
 				}else{
-					return '<span class="label" style="background-color:#890575" title="Sem Registro" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-ban-circle"></i></span>';
+					return '<span class="label" style="background-color:#890575" title="Sem Registro" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-ban-circle"></i> SEM RESGISTRO</span>';
 				}
 			}
 		}	

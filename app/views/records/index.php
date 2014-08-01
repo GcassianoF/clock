@@ -69,7 +69,7 @@ function enviar_formulario()
 		<?topbar();?>
 		<?include DOCROOT."/app/views/protected/sidebar.php";?>
 		<?HTML::main_content_START("main-content");?>
-			<?bar($icon="icon-spinner icon-spin", $titulo="Calendario Mensal", $descricao="Calendario mensal com as horas registradas por dia.");?>
+			<?bar($icon="icon-calendar", $titulo="Calendario Mensal", $descricao="Calendario mensal com as horas registradas por dia.");?>
 			<?Menus_Controller::breadcrumbs("Registro de Horas", "icon-time", null, null, null);?>
 			<?default_messages()?>
 			<?HTML::container_START("container-fluid padded");?>

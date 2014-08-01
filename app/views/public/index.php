@@ -44,11 +44,22 @@
 		<?include DOCROOT."/app/views/protected/sidebar.php";?>
 		<!-- INICIO CENTER MASTER -->
 			<?HTML::main_content_START("main-content");?>
-				<?bar($icon="icon-spinner icon-spin", $titulo="Dashboard", $descricao="Calendario mensal com as horas registradas por dia.");?>
+				<?bar($icon="icon-dashboard", $titulo="Dashboard", $descricao="Calendario mensal com as horas registradas por dia.");?>
+				
+
+
+
+
 				<?default_messages()?>
 				<?HTML::container_START("container-fluid padded");?>
+<div id="breadcrumbs" style="height:40px">			
+<div id="TickerStatus" >
+<ul><?$records_controller->statusUserNow();?></ul>
+</div>						
+</div>
+<br/><br/>
 					<?HTML::row_START("row-fluid");?>
-						<?HTML::span_START("9");?>
+						<?HTML::span_START("12");?>
 							<div class="box">
 								<div class="box-header">
 									<ul class="nav nav-tabs nav-tabs-left">
@@ -197,19 +208,19 @@
 								</div>
 							</div>
 						<?HTML::span_END();?>
-						<?HTML::span_START("3");?>
+					<!--	<?HTML::span_START("3");?>
 							<div class="box" style="font-size:0.8em">
 								<div class="box-header">
 									<span class="title"> <b><?=date('d/m/Y');?></b></span>
 								</div>
 								<div class="box-content padded">
-									<?$records_controller->statusUserNow();?>
+									
 								</div>
 								<div class="box-footer padded">
 
 								</div>
 							</div>
-						<?HTML::span_END();?>
+						<?HTML::span_END();?> -->
 					<?HTML::row_END();?>
 					<?HTML::row_START("row-fluid");?>
 						<?HTML::span_START("6");?>

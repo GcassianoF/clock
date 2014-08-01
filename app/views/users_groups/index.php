@@ -17,13 +17,13 @@
 		<?topbar();?>
 		<?include DOCROOT."/app/views/protected/sidebar.php";?>
 		<?HTML::main_content_START("main-content");?>
-			<?bar($icon="icon-picture", $titulo="Coloque aqui o Titulo!", $descricao="Coloque aqui a Descrição!");?>
-			<?Menus_Controller::breadcrumbs("users_groups", "icon-picture", null, null, null);?>
+			<?bar($icon="icon-group", $titulo="Grupo de Usuario", $descricao="Inserir, alterar e excluir os grupos de usuarios do sistema");?>
+			<?Menus_Controller::breadcrumbs("Grupos de Usuarios", "icon-group", null, null, null);?>
 			<?default_messages()?>
 			<?HTML::container_START("container-fluid padded");?>
 				<?HTML::row_START("row-fluid");?>
 					<?HTML::span_START("12");?>
-						<?HTML::box_START("icon-list", "Coloque aqui o Titulo da Lista");?>
+						<?HTML::box_START("icon-list", "Listagem dos Grupos");?>
 							<div id="dataTables">
 								<?if ($users_groups_list = $users_groups_controller->filter()):?>
 									<table cellpadding="0" cellspacing="0" border="0" class="dTable responsive">

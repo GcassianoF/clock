@@ -48,3 +48,12 @@
             });
     
         </script>
+<script type="text/javascript">
+         $(function() {
+  $('#TickerStatus').vTicker();
+});</script>      
+<style type="text/css">              
+	     
+</style>
+
+

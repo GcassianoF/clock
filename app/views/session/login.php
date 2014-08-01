@@ -12,7 +12,8 @@
         <div class="navbar navbar-top navbar-inverse">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="#">clock</a>
+                    <span class="pull-left"><div class="" align="center" style="width:110px;height:35px;background-color:#f1f1f1;border-radius: 10px 20px;"><img src="<?=WEBROOT?>/images/indra.png" alt="Indra Company" height="200" width="90"> </div></span>
+
                     <ul class="nav pull-right">
                         <li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary"><button type="button" class="btn btn-navbar"><i class="icon-th-list"></i></button></li>
                         <li class="hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-top"><button type="button" class="btn btn-navbar"><i class="icon-align-justify"></i></button></li>

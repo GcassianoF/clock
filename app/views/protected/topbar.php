@@ -4,7 +4,7 @@
           <a class="brand" href="<?=WWWROOT?>">
 
           </a>
-	<!-- <span class="pull-left"><strong>Você esta logado como: </strong><?=$_SESSION['user_name']?></span> -->
+	<span class="pull-left"><div class="" align="center" style="width:110px;height:35px;background-color:#f1f1f1;border-radius: 10px 20px;"><img src="<?=WEBROOT?>/images/indra.png" alt="Indra Company" height="200" width="90"> </div></span>
           <!-- the new toggle buttons -->
           <ul class="nav pull-right">
             <li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary">
@@ -22,7 +22,7 @@
                   <span>
                     <img class="menu-avatar" src="<?=WEBROOT?>/images/avatars/indra.jpg" />
                     <span><i class="icon-caret-down"></i></span>
-                    <span class="badge badge-dark-red">5</span>
+                    <!-- <span class="badge badge-dark-red">5</span> -->
                   </span>
                 </a>
                 <ul class="dropdown-menu">
@@ -35,10 +35,10 @@
                   </li>
                   <li class="divider"></li>
                     <li><a href="<?=WWWROOT?>/users/show/<?=$_SESSION['user_id']?>"><i class="icon-user"></i> <span>Profile</span></a></li>
-                    <li><a href="#"><i class="icon-cog"></i> <span>Settings</span></a></li>
+                    <!-- <li><a href="#"><i class="icon-cog"></i> <span>Settings</span></a></li> -->
                     <li>
                       <a href="#">
-                        <i class="icon-envelope"></i> <span>Messages</span> <span class="label label-dark-red pull-right">5</span>
+                        <!-- <i class="icon-envelope"></i> <span>Messages</span> <span class="label label-dark-red pull-right">5</span> -->
                       </a>
                     </li>
                     <li><a href="<?=WWWROOT?>/logout"><i class="icon-off"></i> <span>Logout</span></a></li>
