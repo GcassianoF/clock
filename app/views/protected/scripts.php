@@ -52,8 +52,23 @@
          $(function() {
   $('#TickerStatus').vTicker();
 });</script>      
-<style type="text/css">              
-	     
-</style>
+<script>
+	$("#breakingnews").BreakingNews({
+			background		:'#FFF',
+			title			:'Status',
+			titlecolor		:'#FFF',
+			titlebgcolor	:'#099',
+			linkcolor		:'#333',
+			linkhovercolor	:'#11161A',
+			fonttextsize	:16,
+			isbold			:false,
+			border			:'solid 1px #099',
+			width			:'100%',
+			timer			:2000,
+			autoplay		:true,
+			effect			:'slide'
+				
+		});   
+</script>
 
 

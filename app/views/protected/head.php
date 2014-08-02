@@ -7,10 +7,12 @@
 <link href="<?=WEBROOT?>/stylesheets/style.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/font/font-awesome/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/plugins/toastmessage/src/main/resources/css/jquery.toastmessage.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?=WEBROOT?>/plugins/BreakingNewsTicker/css/BreakingNews.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/stylesheets/jquery.toast.min.css" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/stylesheets/resume.css" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/stylesheets/resume-control.css" rel="stylesheet" type="text/css" />
 <script src="<?=WEBROOT?>/javascripts/application.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/plugins/toastmessage/src/main/javascript/jquery.toastmessage.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/plugins/vTicker/vTicker.js" type="text/javascript"></script>
+<script src="<?=WEBROOT?>/plugins/BreakingNewsTicker/js/BreakingNews.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/javascripts/jquery.toast.min.js" type="text/javascript"></script>

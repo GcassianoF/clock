@@ -1037,7 +1037,7 @@
 						$count = $this->nowRegisterForUser($usuario->id);
 						//echo '<tr>';
 							//echo '<td align="left" style=" font-size:1.2em;" >'.$nome. '</td>';
-							echo '<li><span class=""><strong style="height:100px">'.$nome. '</strong>&nbsp;&nbsp;&nbsp;&nbsp;'.$count.'</span></li>';
+							echo '<li><a href="#"><strong style="height:100px">'.$nome. '</strong>&nbsp;&nbsp;&nbsp;&nbsp;'.$count.'</a></li>';
 							//echo '<td align="right" style=" font-size:1.2em;text-align:center" >'.$count.'</td>';
 						//echo '</tr>';
 					}
