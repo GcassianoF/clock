@@ -4,19 +4,8 @@
           <a class="brand" href="<?=WWWROOT?>">
 
           </a>
-	<span class="pull-left"><div class="" align="center" style="width:110px;height:35px;background-color:#f1f1f1;border-radius: 10px 20px;"><img src="<?=WEBROOT?>/images/indra.png" alt="Indra Company" height="200" width="90"> </div></span>
-<div class="clock">
-
-
-<ul>
-	<li class="hms" id="hours"> </li>
-    <li class="hms" id="point">:</li>
-    <li class="hms" id="min"> </li>
-    <li class="hms" id="point">:</li>
-    <li class="hms" id="sec"> </li>
-</ul>
-
-</div>          
+	<span class="pull-left"><a href="<?=WWWROOT?>/"><div class="" align="center" style="width:130px;height:50px;background-color:#f1f1f1;border-radius: 10px 20px;"><div><img src="<?=WEBROOT?>/images/indra.png" alt="Indra Company" style="margin:9px 5px 5px 0px" height="200" width="100"></div> </div></a></span>
+         
 <!-- the new toggle buttons -->
           <ul class="nav pull-right">
             <li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary">
@@ -75,6 +64,8 @@
                 </li>
               </ul> -->
             </div>
+              <span class="pull-right"><strong style="color:#FFFFFF">Sua sessão expira em: <b><span id="minutes_left"></span>m<span id="seconds_left"></span>s</b></strong></span><br/>
+              <span class="pull-right"><div id="retroclockbox1"></div></span>
           </div>
         </div>
       </div>

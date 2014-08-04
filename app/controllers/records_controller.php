@@ -1005,45 +1005,28 @@
 			$dao 	= new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
 			$total = 0;
-			/*echo '<div class="well" align="center">';
-			echo '<table class="table table-normal responsive">';
-				echo'<thead>
-						<tr >
-							<th style="font-size:1em;height:30px"></th>
-							<th style="font-size:1em;height:30px;text-align:center">Hoje</strong></th>
-						</tr>
-					</thead>
-				';
-				echo '<tbody>';*/
-					foreach ($Users as  $usuario) 
-					{	
-						$nome = "";
-						if ($usuario->nome != '') 
-						{
-							$array=explode(" ",$usuario->nome);
-							if ($array[1]) 
-							{
-								$nome = $array[0].' '.$array[1];	
-							}
-							else
-							{
-								$nome = $usuario->nome;
-							}
-						}
-						else
-						{
-							$nome = " ";
-						}
-						$count = $this->nowRegisterForUser($usuario->id);
-						//echo '<tr>';
-							//echo '<td align="left" style=" font-size:1.2em;" >'.$nome. '</td>';
-							echo '<li><a href="#"><strong style="height:100px">'.$nome. '</strong>&nbsp;&nbsp;&nbsp;&nbsp;'.$count.'</a></li>';
-							//echo '<td align="right" style=" font-size:1.2em;text-align:center" >'.$count.'</td>';
-						//echo '</tr>';
+			foreach ($Users as  $usuario) 
+			{	
+				$nome = "";
+				if ($usuario->nome != '') 
+				{
+					$array=explode(" ",$usuario->nome);
+					if ($array[1]) 
+					{
+						$nome = $array[0].' '.$array[1];	
 					}
-				/*echo '</tbody>';
-			echo '</table>';
-			echo '</div>';*/
+					else
+					{
+						$nome = $usuario->nome;
+					}
+				}
+				else
+				{
+					$nome = " ";
+				}
+				$count = $this->nowRegisterForUser($usuario->id);
+				echo '<li><a href="#"><span style="min-width:220px;"><strong>'.$nome. '</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="min-width:220px;">'.$count.'</span></a></li>';
+			}
 		}
 	
 		public function nowRegisterForUser($userId)

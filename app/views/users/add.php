@@ -39,9 +39,13 @@
 									<?$form->InputGroup_Start("NOME")?>
 										<?$form->Input(array('type'=>'text', 'class'=>'span8'), 'User', 'nome')?>
 									<?$form->InputGroup_End()?>
+
+									<?$form->InputGroup_Start("MATRICULA")?>
+										<?$form->Input(array('type'=>'text', 'class'=>'span2'), 'User', 'matricula')?>
+									<?$form->InputGroup_End()?>
 									
 									<?$form->InputGroup_Start("CPF")?>
-										<?$form->Input(array('type'=>'text', 'class'=>'span8'), 'User', 'cpf')?>
+										<?$form->Input(array('type'=>'text', 'class'=>'span2'), 'User', 'cpf')?>
 									<?$form->InputGroup_End()?>
 									
 									<?$form->InputGroup_Start("EMAIL")?>

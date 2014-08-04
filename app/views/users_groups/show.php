@@ -31,10 +31,10 @@
 								<?HTML::show_content_START();?>
 									<?HTML::show_content_title('Perfil', 'icon-list');?>
 									<?HTML::show_content_box_START()?>
-												<?HTML::show_content_field('CODIGO', 'icon-asterisc', $Users_group->id);?>
-												<?HTML::show_content_field('NOME', 'icon-group', $Users_group->nome);?>
-												<?HTML::show_content_field('DESCRIÇÃO', 'icon-tag', $Users_group->descricao);?>
-												<?HTML::show_content_field('CRIADO', 'icon-calendar', format_date($Users_group->created_at, "/", $t=false));?>
+										<?HTML::show_content_field('CODIGO', 'icon-asterisc', $Users_group->id);?>
+										<?HTML::show_content_field('NOME', 'icon-group', $Users_group->nome);?>
+										<?HTML::show_content_field('DESCRIÇÃO', 'icon-tag', $Users_group->descricao);?>
+										<?HTML::show_content_field('CRIADO', 'icon-calendar', format_date($Users_group->created_at, "/", $t=false));?>
 									<?HTML::show_content_box_END()?>
 								<?HTML::show_content_END();?>
 							<?else:?>

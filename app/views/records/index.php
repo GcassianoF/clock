@@ -16,59 +16,25 @@
 			}
 		?>
 		<script type="text/javascript">
-			/*jQuery(document).ready(function(){
-				jQuery('#ajax_form').submit(function(){
-					var dados = jQuery( this ).serialize();
-		 
-					jQuery.ajax({
-						type: "POST",
-						url: ""?>",
-						data: dados,
-						success: function(data)
-						{
-							alert("Deu certo");
-						}
-						
-					});
-					
-					return false;
-				});
-			});*/
-			/*$(document).ready(function(){
-	$("#add_err").css('display', 'none', 'important');
-	 $("#login").click(function(){	
-		  password=$("#word").val();
-		  $.ajax({
-		   type: "POST",
-		   url: "<?=WWWROOT.'/protected/autenthic.php'?>",
-			data: "&pwd="+password,
-		   success: function(html){    
-			if(html=='true')    {
-			 alert('sucesso');
+			function enviar_formulario()
+			{ 
+				var formulario = document.getElementById('formAu');
+				document.getElementById('Record_pwd').value = document.getElementById('Session_pwd').value;
+				formulario.submit();
 			}
-			else    {
-			 $("#add_err").html("<strong>Deu merda</strong>");
-			}
-		   },
-		   beforeSend:function()
-		   {
-		   }
-		  });
-		return false;
-	});
-});*/
-function enviar_formulario()
-{ 
-	var formulario = document.getElementById('formAu');
-	document.getElementById('Record_pwd').value = document.getElementById('Session_pwd').value;
-	formulario.submit();
-}
 		</script>
 	</head>
 	<body>
 		<?topbar();?>
 		<?include DOCROOT."/app/views/protected/sidebar.php";?>
 		<?HTML::main_content_START("main-content");?>
+			<div class="BreakingNewsController easing" id="breakingnews">
+				<div class="bn-title"></div>
+				<ul>
+					<?$records_controller->statusUserNow();?>
+				</ul>
+				<div class="bn-arrows"><span class="bn-arrows-left"></span><span class="bn-arrows-right"></span></div>	
+			</div>
 			<?bar($icon="icon-calendar", $titulo="Calendario Mensal", $descricao="Calendario mensal com as horas registradas por dia.");?>
 			<?Menus_Controller::breadcrumbs("Registro de Horas", "icon-time", null, null, null);?>
 			<?default_messages()?>
@@ -96,7 +62,7 @@ function enviar_formulario()
 									<?$form->InputGroup_End()?>
 								<?Form_html::form_END()?>
 								<?Form_html::form_actions_START()?>
-									<button type="submit" class="btn btn-blue"><i class="icon-save"></i> Salvar</button>
+									<button type="submit" class="btn btn-blue" id="saveNewRecord"><i class="icon-save"></i> Salvar</button>
 									<a href="<?=WWWROOT?>/records" class="btn btn-gold"><i class="icon-remove-sign"></i> Cancelar</a>
 								<?Form_html::form_actions_END()?>
 							<?$form->End()?>
@@ -113,44 +79,64 @@ function enviar_formulario()
 				<?HTML::row_END();?>
 			<?HTML::container_END();?>
 			<!-- INICIO MODAL CONFIRMAÇÃO DE INSERSÃO -->
-    <div id="confirmation_modal_record" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Autenticação</h3>
-        </div>
-        <div class="modal-body">
-            <div class="loginform-in">
-                <h2><?$records_controller->primeSegName($_SESSION['user_name']);?></h2>
-                <h5>Para execultar esta ação e preciso informa sua credêncial: <??> </h5>
-                    <?$form = new Form_html(array('class'=>'form-horizontal fill-up validatable','id'=>'formAutho'));
-                    $form->Start();?>
-                        <?Form_html::form_START()?>
-                            <div class="input-prepend">
-                                <span class="add-on" href="#"><i class="icon-key"></i></span>
-                                <?php $form->Input(array('type'=>'password', 'placeholder'=>'Senha', 'style'=>'width:300px;','id'=>'Session_pwd'), 'Session', 'senha')?>
-                                <button type="submit" class="btn btn-blue " onclick="enviar_formulario();" style="height:35px">Autenticar <i class="icon-signin"></i></button>
-                            </div> 
-                        <?Form_html::form_END()?>
-                    <?$form->End()?>    
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i> Cancelar</a>
-        </div>
-    </div>
-<!-- FIM MODAL CONFIRMAÇÃO DE INSERSÃO -->
+			    <div id="confirmation_modal_record" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+			        <div class="modal-header">
+			            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			            <h3 id="myModalLabel">Autenticação</h3>
+			        </div>
+			        <div class="modal-body">
+			            <div class="loginform-in">
+			                <h2><?$records_controller->primeSegName($_SESSION['user_name']);?></h2>
+			                <h5>Para execultar esta ação e preciso informa sua credêncial: <??> </h5>
+			                    <?$form = new Form_html(array('class'=>'form-horizontal fill-up validatable','id'=>'formAutho'));
+			                    $form->Start();?>
+			                        <?Form_html::form_START()?>
+			                            <div class="input-prepend">
+			                                <span class="add-on" href="#"><i class="icon-key"></i></span>
+			                                <?php $form->Input(array('type'=>'password', 'placeholder'=>'Senha', 'style'=>'width:300px;','id'=>'Session_pwd'), 'Session', 'senha')?>
+			                                <button type="submit" class="btn btn-blue " onclick="enviar_formulario();" style="height:35px">Autenticar <i class="icon-signin"></i></button>
+			                            </div> 
+			                        <?Form_html::form_END()?>
+			                    <?$form->End()?>    
+			            </div>
+			        </div>
+			        <div class="modal-footer">
+			            <a href="#" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i> Cancelar</a>
+			        </div>
+			    </div>
+			<!-- FIM MODAL CONFIRMAÇÃO DE INSERSÃO -->
 		<?HTML::main_content_END();?>
 		<?scripts();?>
 		<script type="text/javascript">
-			$('.btn-blue').click(function(e){
+			$('.btn-blue').click(function(e)
+			{
 				var href = $(this).attr('href');
 				$('#confirmation_modal_record').modal({show: true});
-				$('#confirm_danger_record').click(function(e){
+				$('#confirm_danger_record').click(function(e)
+				{
 					//window.location = href;
 					e.preventDefault();
 				});
 				e.preventDefault();
 			});
+		</script>
+		<script>
+			$("#breakingnews").BreakingNews
+			({
+				background	: 	'#FBFBFB',
+				title		   	: 	'Situação Atual dos Usuarios',
+				titlecolor	   	:  	'#FFF',
+				titlebgcolor	   	: 	'#151B20',
+				linkcolor	   	: 	'#333',
+				linkhovercolor	: 	'#CC0C35',
+				fonttextsize	   	: 	13,
+				isbold		   	: 	false,
+				border	   	: 	'solid 2px #EEEEEF',
+				width			: 	'100%',
+				timer			: 	2000,
+				autoplay		: 	true,
+				effect			: 	'slide'
+			});   
 		</script>
 	</body>
 </html>

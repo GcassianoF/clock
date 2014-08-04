@@ -13,7 +13,7 @@ class Session_Controller extends App_Controller {
 		if ($DATA)
 		{
 			// escolhe os campos a serem validados
-			validates_presence_of('Session', 'email', 'E-mail');
+			validates_presence_of('Session', 'email', 'E-mail ou Matricula');
 			validates_presence_of('Session', 'senha', 'Senha');
 			// valida os campos e em caso de erro joga mensagens padrão e retorna false
 			if (check_errors())
@@ -21,24 +21,34 @@ class Session_Controller extends App_Controller {
 				return false;
 			}
 
+			$mailOrMatricula = $DATA['Session']['email'];
+			if( strstr($mailOrMatricula,"@")){
+				$data = array
+				(
+					'email' => $DATA['Session']['email'],
+					'senha' => md5($DATA['Session']['senha'])
+				);
+			}else{
+				$data = array
+				(
+					'matricula' => $DATA['Session']['email'],
+					'senha' => md5($DATA['Session']['senha'])
+				);
+			}
+
 			// caso tudo ocorra bem o objeto DAO é instanciado
 			$dao = new DAO();
-
-			// e os dados do login são informados neste bonito array
-			$data = array(
-				'email' => $DATA['Session']['email'],
-				'senha' => md5($DATA['Session']['senha'])
-			);
 
 			// se houver um usuário no banco de dados com essas credenciais inicia-se a sessão
 			if ($user = $dao->Retrieve('Users', $data, true, true))
 			{
-				$_SESSION['logged_in']      = true;
-				$_SESSION['user_id']        = $user->id;
-				$_SESSION['user_email']     = $user->email;
-				$_SESSION['user_name']      = $user->nome;
-				$_SESSION['users_group_id'] = $user->users_group_id;
-				$_SESSION['logged_since']   = now();
+				$_SESSION['logged_in']		= true;
+				$_SESSION['user_id']		= $user->id;
+				$_SESSION['user_email']	= $user->email;
+				$_SESSION['user_name']	= $user->nome;
+				$_SESSION['user_matricula']	= $user->matricula;
+				$_SESSION['users_group_id']	= $user->users_group_id;
+				$_SESSION['logged_since']	= now();
 
 				// redireciona para a pagina inicial
 				redirect_to();

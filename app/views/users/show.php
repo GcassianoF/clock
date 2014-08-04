@@ -40,6 +40,7 @@
 									<?HTML::show_content_title('PERFIL', '',$var);?>
 									<?HTML::show_content_box_START()?>
 										<?HTML::show_content_field('NOME', 'icon-user', '&nbsp;'.$User->nome);?>
+										<?HTML::show_content_field('MATRICULA', 'icon-user', '&nbsp;'.$User->matricula);?>
 										<?HTML::show_content_field('CPF', 'icon-asterisk', '&nbsp;'.$User->cpf);?>
 										<?HTML::show_content_field('GRUPO', 'icon-group', '&nbsp;'.$User->rel['users_group']->nome);?>
 										<?HTML::show_content_field('EMAIL', 'icon-envelope-alt', '&nbsp;'.$User->email);?>

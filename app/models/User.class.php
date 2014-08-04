@@ -6,6 +6,7 @@
 		public $users_group_id;
 		public $itineraries_id;
 		public $nome;
+		public $matricula;
 		public $cpf;
 		public $email;
 		public $senha;

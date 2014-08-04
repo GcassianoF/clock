@@ -15,6 +15,7 @@
 				validates_presence_of('User', 'users_group_id', 'GRUPO DE USUARIO');
 				validates_presence_of('User', 'itineraries_id', 'GARGA HORARIA');
 				validates_presence_of('User', 'nome', 'NOME');
+				validates_presence_of('User', 'matricula', 'MATRICULA');
 				validates_presence_of('User', 'cpf', 'CPF');
 				validates_presence_of('User', 'email', 'EMAIL');
 				validates_presence_of('User', 'senha', 'SENHA');
@@ -29,6 +30,8 @@
 				validates_uniqueness_of('cpf', $DATA['User'], 'User', 'CPF');
 				// valida se o campo informado e unico
 				validates_uniqueness_of('email', $DATA['User'], 'User', 'EMAIL');
+				// valida se o campo informado e unico
+				validates_uniqueness_of('matricula', $DATA['User'], 'User', 'MATRICULA');
 				
 				// valida as funções acima caso de erro retorna p/ o usuario
 				if(check_errors())
@@ -70,6 +73,7 @@
 				validates_presence_of('User', 'users_group_id', 'GRUPO DE USUARIO');
 				validates_presence_of('User', 'itineraries_id', 'GARGA HORARIA');
 				validates_presence_of('User', 'nome', 'NOME');
+				validates_presence_of('User', 'matricula', 'MATRICULA');
 				validates_presence_of('User', 'cpf', 'CPF');
 				validates_presence_of('User', 'email', 'EMAIL');
 				validates_presence_of('User', 'senha', 'SENHA');
@@ -78,6 +82,13 @@
 				validates_format_of('User', 'cpf', 'cpf', 'CPF', TRUE );
 				// valida se o email, CPF ou CNPJ informado e valido
 				validates_format_of('User', 'email', 'email', 'EMAIL', TRUE );
+				
+				// valida se o campo informado e unico
+				validates_uniqueness_of('cpf', $DATA['User'], 'User', 'CPF');
+				// valida se o campo informado e unico
+				validates_uniqueness_of('email', $DATA['User'], 'User', 'EMAIL');
+				// valida se o campo informado e unico
+				validates_uniqueness_of('matricula', $DATA['User'], 'User', 'MATRICULA');
 				
 				
 				// valida as funções acima caso de erro retorna p/ o usuario

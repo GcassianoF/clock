@@ -13,7 +13,11 @@
         <ul class="nav nav-collapse collapse nav-collapse-primary">
             <li class="active">
                 <span class="glow"></span>
-                <a href="<?=WWWROOT?>"><i class="icon-dashboard icon-2x"></i><span>Dashboard</span></a>
+                <a href="<?=WWWROOT?>"><i class="icon-home icon-2x"></i><span>Home</span></a>
+            </li>
+            <li class="active">
+                <span class="glow"></span>
+                <a href="<?=WWWROOT?>/dashboard"><i class="icon-dashboard icon-2x"></i><span>Dashboard</span></a>
             </li>
 	  <li class="active dark-nav">
                 <span class="glow"></span>
@@ -24,7 +28,7 @@
                     FROM navigation_menus NM
                     INNER JOIN navigation_pages NP ON (NP.navigation_menu_id = NM.id)
                     INNER JOIN permissions P ON (P.navigation_page_id = NP.id)
-                    WHERE NP.mostrar = '1'
+                    WHERE NP.mostrar = '1' AND NM.nome != 'Dashboard'
                     AND P.users_group_id = '{$USER->users_group_id}'
                     ORDER BY NM.posicao, NM.id, NP.id";
                     //echo $sql;
@@ -93,6 +97,7 @@
             </div>
             <hr class="divider">
         </div> -->
+
     </div>
 </div>
 <!-- FIM CHARTS MENU VERTICAL -->
@@ -113,4 +118,18 @@
     </div>
 </div>
 <!-- FIM MODAL CONFIRMAÇÃO DE DELEÇÃO -->
+<!-- INICIO MODAL FIM DE SESSÃO -->
+        <div id="confirmation_modal_expired_session" data-backdrop="static" class="modal hide fade" tabindex="-1" role="modal" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-header">
+        <h3 id="myModalLabel">Sessão Expirada</h3>
+        </div>
+        <div class="modal-body">
+        <h2><?=$_SESSION['user_name'];?></h2>
+        <h5>Atenção sua sessão expirou efetue o login novamente</h5>
+        </div>
+        <div class="modal-footer">
+        <button type="submit" class="btn btn-gray "onclick="time_out_new_login()" ><i class="icon-signin"></i> Ok</button>
+        </div>
+        </div>
+<!-- FIM MODAL FIM DE SESSÃO -->
 

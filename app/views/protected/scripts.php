@@ -48,27 +48,50 @@
             });
     
         </script>
-<script type="text/javascript">
-         $(function() {
-  $('#TickerStatus').vTicker();
-});</script>      
-<script>
-	$("#breakingnews").BreakingNews({
-			background		:'#FFF',
-			title			:'Status',
-			titlecolor		:'#FFF',
-			titlebgcolor	:'#099',
-			linkcolor		:'#333',
-			linkhovercolor	:'#11161A',
-			fonttextsize	:16,
-			isbold			:false,
-			border			:'solid 1px #099',
-			width			:'100%',
-			timer			:2000,
-			autoplay		:true,
-			effect			:'slide'
-				
-		});   
-</script>
+         <script type="text/javascript">
+                  var time_left = null;
+                  var seconds_left = null;
+                  var minutes_left = null;
+                  var time_out_page = null;
+                  var time_dec_interval;
+                  var time_clear_interval;
+                  function time_dec() {
+                           time_left--;
+                           seconds_left = time_left % 60;
+                           minutes_left = Math.floor(time_left / 60);
+
+                           document.getElementById('seconds_left').innerHTML = seconds_left;
+                           document.getElementById('minutes_left').innerHTML = minutes_left;
+
+                           if (time_left == 0) {
+                                    clearInterval(time_dec_interval);
+                                    $('#confirmation_modal_expired_session').modal({show: true});
+                           }
+                  }
+                  function time_clear() {
+                           time_left = 900;
+                           seconds_left = time_left % 60;
+                           minutes_left = Math.floor(time_left / 60);
+                           time_out_page = "<?=WWWROOT?>/logout";
+                           document.getElementById('seconds_left').innerHTML = seconds_left;
+                           document.getElementById('minutes_left').innerHTML = minutes_left;
+                           clearInterval(time_clear_interval);
+                           clearInterval(time_dec_interval);
+                           time_dec_interval = setInterval('time_dec()', 1000);
+                  }
+                  function time_out_new_login() {
+                           $('#confirmation_modal_expired_session').modal({show: false});
+                           window.location.href = time_out_page;
+                  }
+                  time_clear_interval = setInterval('time_clear()', 0);
+         </script>    
+         <script>
+                  jQuery(function($){
+                           $("#retroclockbox1").flipcountdown({
+                                    size:"xs"
+                           });
+                  })
+         </script>
+
 
 

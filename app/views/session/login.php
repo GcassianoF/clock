@@ -12,8 +12,7 @@
         <div class="navbar navbar-top navbar-inverse">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <span class="pull-left"><div class="" align="center" style="width:110px;height:35px;background-color:#f1f1f1;border-radius: 10px 20px;"><img src="<?=WEBROOT?>/images/indra.png" alt="Indra Company" height="200" width="90"> </div></span>
-
+                    <span class="pull-left"><div class="" align="center" style="width:130px;height:50px;background-color:#f1f1f1;border-radius: 10px 20px;"><div><img src="<?=WEBROOT?>/images/indra.png" alt="Indra Company" style="margin:9px 5px 5px 0px" height="200" width="100"></div> </div></span>
                     <ul class="nav pull-right">
                         <li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary"><button type="button" class="btn btn-navbar"><i class="icon-th-list"></i></button></li>
                         <li class="hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-top"><button type="button" class="btn btn-navbar"><i class="icon-align-justify"></i></button></li>
@@ -52,7 +51,7 @@
                             <div class="separate-sections">
                                 <div class="input-prepend">
                                     <span class="add-on" href="#"><i class="icon-user"></i></span>
-                                    <?php $form->Input(array('type'=>'text', 'placeholder'=>'E-mail'), 'Session', 'email')?>
+                                    <?php $form->Input(array('type'=>'text', 'placeholder'=>'E-mail ou Matricula'), 'Session', 'email')?>
                                 </div>
                                 <div class="input-prepend">
                                     <span class="add-on" href="#"><i class="icon-key"></i></span>

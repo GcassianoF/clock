@@ -33,6 +33,7 @@
 												<th><stong>GRUPO</stong></th>
 												<th><stong>HORARIO</stong></th>
 												<th><stong>NOME</stong></th>
+												<th><stong>MATRICULA</stong></th>
 												<th><stong>CPF</stong></th>
 												<th><stong>EMAIL</stong></th>
 												<th style="width:120px"><stong>Opções</stong></th>
@@ -40,12 +41,12 @@
 										</thead>
 										<tbody>
 											<?foreach($users_list['query'] as $users):?>
-												<?/*var_dump($users);exit();*/?>
 												<tr>
 													<td  class="center"><?=$users->id?></td>
 													<td  class="center"><?=$users->rel['users_group']->nome?></td>
 													<td  class="center"><?=$users->rel['itineraries']->descricao?></td>
 													<td><?=$users->nome?></td>
+													<td><?=$users->matricula?></td>
 													<td class="center"><?=$users->cpf?></td>
 													<td><?=$users->email?></td>
 													<td class="center">
