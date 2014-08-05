@@ -45,12 +45,20 @@
 								$e = sum_time($Itinenary->entrada, "00:15:00");
 								$j  = strtotime($e);
 								$d = strtotime($time);
+
+								$sub = sum_time($Itinenary->entrada, "00:15:00");
+								$jsub  = strtotime($sub);
+								$dsub = strtotime($time);
+
 								if ($d > $j) {
 									if ($DATA['Record']['justificativa'] == "") {
 										$MSG->error[] = "O campo Justificativa e obrigatorio";
 										$MSG->alert[] = "Seu horário de entrada é as ".$Itinenary->entrada." e você esta tentando efetuar um registro acima dos 15 minustos de tolerância sem justificativa.";
 										return false;
 									}
+								}elseif ($dsub < $jsub) {
+									$MSG->alert[] = "Seu horário de entrada é as ".$Itinenary->entrada." e você esta tentando efetuar um registro abaixo dos 15 minustos de tolerância.";
+									return false;
 								}
 							}
 							

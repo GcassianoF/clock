@@ -23,6 +23,38 @@ function sum_time($time1, $time2)
 	return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 }
 
+function sub_time($time1, $time2) 
+{
+	$timesT1 = array($time1);
+	$timesT2 = array($time1);
+	$secondsT1 = 0;
+	$secondsT2 = 0;
+	foreach ($timesT1 as $time1)
+	{
+		list($hour1,$minute1,$second1) = explode(':', $time1);
+		$secondsT1 += $hour1*3600;
+		$secondsT1 += $minute1*60;
+		$secondsT1 += $second1;
+	}
+
+	foreach ($timesT2 as $time2)
+	{
+		list($hour2,$minute2,$second2) = explode(':', $time2);
+		$secondsT2 += $hour2*3600;
+		$secondsT2 += $minute2*60;
+		$secondsT2 += $second2;
+	}	
+	
+	$seconds = $secondsT1 - $secondsT2;
+	
+	$hours = floor($seconds/3600);
+	$seconds -= $hours*3600;
+	$minutes  = floor($seconds/60);
+	$seconds -= $minutes*60;
+	// return "{$hours}:{$minutes}:{$seconds}";
+	return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+}
+
 // gives the difference between two dates without counting time difference
 function calc_days($date1, $date2, $time_limit=false)
 {

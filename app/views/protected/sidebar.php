@@ -15,10 +15,17 @@
                 <span class="glow"></span>
                 <a href="<?=WWWROOT?>"><i class="icon-home icon-2x"></i><span>Home</span></a>
             </li>
-            <li class="active">
-                <span class="glow"></span>
-                <a href="<?=WWWROOT?>/dashboard"><i class="icon-dashboard icon-2x"></i><span>Dashboard</span></a>
-            </li>
+            <?if ($entrada = $dao->get("Navigation_menus", " INNER JOIN navigation_pages NP ON (NP.navigation_menu_id = navigation_menus.id)
+                                INNER JOIN permissions P ON (P.navigation_page_id = NP.id)
+                                WHERE NP.mostrar = '1' AND navigation_menus.nome = 'Dashboard'
+                                AND P.users_group_id = '{$USER->users_group_id}'")):?>
+                        <li class="active">
+                                    <span class="glow"></span>
+                                    <a href="<?=WWWROOT?>/dashboard"><i class="icon-dashboard icon-2x"></i><span>Dashboard</span></a>
+                        </li>
+            <?else:?>
+                                    
+            <?endif?>
 	  <li class="active dark-nav">
                 <span class="glow"></span>
                 <a href="<?=WWWROOT.'/records/'?>"><i class="icon-time icon-2x"></i><span>Registrar Hora</span></a>
