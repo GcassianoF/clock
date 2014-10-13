@@ -354,12 +354,12 @@
 				if ($var01 > $var02)
 				{
 					$dif = sub_time($total, '08:00:00');
-					echo '<td align="center" style="border:none"> 08:00:00</td>';
-					echo '<td align="center" style="border:none"> + '.$dif.'</td>';
+					echo '<td align="center" style="border:none;font-weight:bold"> 08:00:00</td>';
+					echo '<td align="center" style="border:none;color:#468847;font-weight:bold"> + '.$dif.'</td>';
 				} else {
 					$dif = sub_time('08:00:00',$total);
-					echo '<td align="center" style="border:none"> '.$total.'</td>';
-					echo '<td align="center" style="border:none"> - '.$dif.'</td>';
+					echo '<td align="center" style="border:none;font-weight:bold"> '.$total.'</td>';
+					echo '<td align="center" style="border:none;color:#B94A48;font-weight:bold"> - '.$dif.'</td>';
 				}
 
 				//echo '<td align="center" style="border:none"> '.$total.'</td>';
