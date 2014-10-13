@@ -1,4 +1,8 @@
-	<script type="text/javascript">
+  <?
+    $records_controller = new Records_Controller();
+  ?>
+
+  <script type="text/javascript">
 		$('.btn-red').click(function(e){
 			var href = $(this).attr('href');
 			$('#confirmation_modal').modal({show: true});
@@ -46,7 +50,7 @@
                 /* end change color
           --------------------------- */
             });
-    
+
         </script>
          <script type="text/javascript">
                   var time_left = null;
@@ -84,12 +88,18 @@
                            window.location.href = time_out_page;
                   }
                   time_clear_interval = setInterval('time_clear()', 0);
-         </script>    
+         </script>
          <script>
                   jQuery(function($){
                            $("#retroclockbox1").flipcountdown({
                                     size:"xs"
+                                    <?$records_controller->timeForFinish();?>
                            });
+                           /*$('#retroclockbox2').flipcountdown({
+                                     size:"xs",
+                                    tick:function(){return new Date('');}
+                           });*/
+                           $('#retroclockbox2').flipcountdown({size:"xs"});
                   })
          </script>
 

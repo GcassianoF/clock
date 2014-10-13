@@ -1,21 +1,20 @@
 <?php
 	class Records_Controller extends App_Controller
 	{
-		
+
 		private $records = false;
 		public $show = false;
-		
+
 		public static function add()
 		{
 			global $DATA;
 			global $MSG;
-			
+
 			if($DATA['Record'])
 			{
 				$dao = new DAO();
 				if ($DATA['Record']['pwd'])
 				{
-					// e os dados do login são informados neste bonito array
 					$data = array(
 						'email' => $_SESSION['user_email'],
 						'senha' => md5($DATA['Record']['pwd'])
@@ -29,24 +28,25 @@
 						$var = explode(" ",$dateTime,2);
 						$date = $var[0];
 						$time = $var[1];
-						$Users = $dao->get("Users", $_SESSION['user_id']);	
+						$Users = $dao->get("Users", $_SESSION['user_id']);
 						$Itinenary = $Users->rel['itineraries'];
 						$Reason = $dao->get("Reasons", $DATA['Record']['reason_id']);
 
 						if ($teste = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = CURRENT_DATE AND records.reason_id = ".$DATA['Record']['reason_id']." AND records.user_id = ".$_SESSION['user_id'])) {
 							$MSG->info[] = "Atenção! voçê já  possui registro  de ".$Reason->descricao." para a data de hoje ".$dateVar;
-						}else{
+						}else
+						{
 							$DATA['Record']['user_id'] 	= $_SESSION['user_id'];
 							$DATA['Record']['data'] 	= $date;
 							$DATA['Record']['hora'] 	= $time;
 							$DATA['Record']['dataHora'] 	= $dateTime;
-							
+
 							if ($Reason->descricao === "ENTRADA") {
 								$e = sum_time($Itinenary->entrada, "00:15:00");
 								$j  = strtotime($e);
 								$d = strtotime($time);
 
-								$sub = sum_time($Itinenary->entrada, "00:15:00");
+								$sub = sub_time($Itinenary->entrada, "00:15:00");
 								$jsub  = strtotime($sub);
 								$dsub = strtotime($time);
 
@@ -56,22 +56,23 @@
 										$MSG->alert[] = "Seu horário de entrada é as ".$Itinenary->entrada." e você esta tentando efetuar um registro acima dos 15 minustos de tolerância sem justificativa.";
 										return false;
 									}
-								}elseif ($dsub < $jsub) {
+								}
+								if ($dsub < $jsub) {
 									$MSG->alert[] = "Seu horário de entrada é as ".$Itinenary->entrada." e você esta tentando efetuar um registro abaixo dos 15 minustos de tolerância.";
 									return false;
 								}
 							}
-							
+
 							// valida as funções acima caso de erro retorna p/ o usuario
 							if(check_errors())
 							{
 								return false;
 							}
-							
+
 							// caso não haja error o objeto DAO e instanciado
 							// instacia o objeto da Class principal
 							$record = new Record($DATA['Record']);
-							
+
 							if($dao->Create($record))
 							{
 								$MSG->success[] = "Cadastro efetuado!";
@@ -81,25 +82,24 @@
 								$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
 							}
 						}
-					}
-					else
+					}else
 					{
 						$MSG->error[] = 'Erro ao Autenticar. Verifique os dados.';
 					}
 				}else
 				{
 					$MSG->alert[] = "Atenção, Favor informa suas credênciais";
-				}	
+				}
 
 			}
 			return false;
 		}
-		
+
 		public function update($record)
 		{
 			global $DATA;
 			global $MSG;
-			
+
 			if($DATA['Record'])
 			{
 				// campos obrigatoios
@@ -107,7 +107,7 @@
 				validates_presence_of('Record', 'reason_id', 'REASON_ID');
 				validates_presence_of('Record', 'data', 'DATA');
 				validates_presence_of('Record', 'hora', 'HORA');
-				
+
 				// valida as funções acima caso de erro retorna p/ o usuario
 				if(check_errors())
 				{
@@ -115,7 +115,7 @@
 				}
 				// caso não haja error o objeto DAO e instanciado
 				$dao = new DAO();
-				
+
 				$record = batch_update($record, $DATA['Record']);
 				if($dao->Update($record))
 				{
@@ -123,7 +123,7 @@
 				}
 			}
 		}
-		
+
 		public function filter()
 		{
 			$dao  = new DAO();
@@ -137,8 +137,8 @@
 				$sql .= @$_GET['reason_id'] ? " AND records.reason_id LIKE '%".@$_GET['reason_id']."%' " : "";
 				$sql .= @$_GET['data'] ? " AND records.data LIKE '%".@$_GET['data']."%' " : "";
 				$sql .= @$_GET['hora'] ? " AND records.hora LIKE '%".@$_GET['hora']."%' " : "";
-			}	
-				
+			}
+
 			$q = mysql_query($sql) or die(mysql_error());
 			if (!mysql_num_rows($q)) return false;
 			while ($row = mysql_fetch_assoc($q))
@@ -147,7 +147,7 @@
 			}
 			return parent::paginate($this->records, $page, $limit);
 		}
-		
+
 		public function mesAtual()
 		{
 			$mesAtual = date('F');
@@ -216,7 +216,7 @@
 			}
 		}
 
-		public function impr_calendar( $mes='', $ano='') 
+		public function impr_calendar( $mes='', $ano='')
 		{
 			$dao  = new DAO();
 			$mes = !$mes ? date('m') : $mes;
@@ -226,7 +226,7 @@
 			$estiloDia    = "";
 			$estiloDiaAtual    = "";
 
-			echo '<table class="responsive">
+			echo '<div align="center"><table class="responsive">
 			<thead>
 				<tr >
 					<th style="font-size:0.8em;width:30px;height:30px"></th>
@@ -237,32 +237,32 @@
 					<th style="font-size:0.8em;width:95px;height:30px"><span class="label label-gray" style="font-weight: normal;width:80px"><i class="icon-arrow-down"></i>  INTERVALO</span></th>
 					<th style="font-size:0.8em;width:95px;height:30px"><span class="label label-info" style="font-weight: normal;width:80px"><i class="icon-arrow-up"></i>  RETORNO</span></th>
 					<th style="font-size:0.8em;width:95px;height:30px"><span class="label label-important" style="font-weight: normal;width:80px"><i class="icon-arrow-down"></i>  SAIDA</span></th>
-					<th style="font-size:0.8em;width:100px;height:30px"><span class="label label-warning" style="font-weight: normal;width:80px"><i class="icon-arrow-up"></i>  EXTRA</span></th>
-					<th style="font-size:0.8em;width:100px;height:30px"><span class="label" style="font-weight: normal;width:80px"><i class="icon-arrow-down"></i>  EXTRA</span></th>
+					<th style="font-size:0.8em;width:100px;height:30px"><span class="label label-black" style="font-weight: normal;width:80px"><i class="icon-time"></i>  HORAS</span></th>
+					<th style="font-size:0.8em;width:100px;height:30px"><span class="label" style="font-weight: normal;width:80px"><i class="icon-plus"></i>  EXTRA</span></th>
 					<th>&nbsp;&nbsp;&nbsp;</th>
 				</tr>
 			</thead>';
 			$dia = 1;
 			echo '<tbody>';
-			
-			while ( $dia <= cal_days_in_month(1, $mes, $ano) ) 
-			{	
-				for ( $i = 0; $i <= 6; $i++ ) 
+
+			while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+			{
+				for ( $i = 0; $i <= 6; $i++ )
 				{
 					$entrada	 = null;
 					$intervalo	 = null;
 					$retorno	 = null;
-					$saida	 = null;
+					$saida	 	 = null;
 					$extraInicio	 = null;
 					$extraFim	 = null;
-					$diaExtenso = null; 
-					if ( $dia <= cal_days_in_month(1, $mes, $ano) ) 
+					$diaExtenso = null;
+					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
 					{
-						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i ) 
+						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
 						{
 							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
 							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
-							if ($dia == date('d') && $mes == date('m') && $ano == date('Y')) 
+							if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
 							{
 								$diaExtenso = $this->nameDiaAtual($dia,$mes,$ano,FALSE);
 								echo '<tr style="">';
@@ -278,15 +278,17 @@
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-info\'> '.$retorno[0]->hora.'</span></td>';}else{echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"> --:--:--</td>';}
 									if ($saida = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-important\'> '.$saida[0]->hora.'</span></td>';}else{echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"> --:--:--</td>';}
-									if ($extraInicio = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"> --:--:--</td>';}
+									/*if ($extraInicio = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
+									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}
 									if ($extraFim = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"> --:--:--</td>';}
+									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}*/
+									$this->calcularTotalJob($ano."-".$mes."-".$dia);
 									echo '<td>&nbsp;&nbsp;&nbsp;</td>';
 								echo '</tr>';
 
-							}else 
+							}else
 							{
+								/*$this->fimDeSemana($dia,$mes,$ano)*/
 								echo '<tr>';
 									echo '<td align="center" style="border:none"></td>';
 									echo '<td align="right" style="border:none'.$this->fimDeSemana($dia,$mes,$ano).' border:none" >'. $this->nameDiaAtual($dia,$mes,$ano) . '</td>';
@@ -300,15 +302,19 @@
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"><span class=\'label label-info\'> '.$retorno[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"> --:--:--</td>';}
 									if ($saida = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"><span class=\'label label-important\'> '.$saida[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"> --:--:--</td>';}
-									if ($extraInicio = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"> --:--:--</td>';}
-									if ($extraFim = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"> --:--:--</td>';}
+									/*if ($extraInicio = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
+									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:none"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}*/
+									/*if ($extraFim = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
+									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:none"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}*/
+
+									$this->calcularTotalJob($ano."-".$mes."-".$dia);
 									echo '<td>&nbsp;&nbsp;&nbsp;</td>';
 								echo '</tr>';
+
+
 							}
 							$dia++;
-						} 
+						}
 					}
 				}
 			}
@@ -316,24 +322,67 @@
 			echo"</table>";
 			echo '<br/><div>
 				<p>&nbsp;&nbsp;&nbsp;&nbsp;Dia Atual: <i style="background-color:#b3f5a6; width:20px;height:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>     Fim de Semana: <i style="background-color:#c4c4c4; width:20px;height:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i></p>
-					
-			</div>';
+
+			</div></div>';
 		}
-		
+
+		public function calcularTotalJob($data=NULL)
+		{
+			$dao  		= new DAO();
+			if (($entrada = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'ENTRADA' AND records.deleted_at IS NULL"))
+				&& ($intervalo = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'INTERVALO' AND records.deleted_at IS NULL"))
+				&& ($retorno  = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL"))
+				&& ($saida = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")))
+			{
+				$inicio = new DateTime($entrada[0]->dataHora);
+				$pausa = new DateTime($intervalo[0]->dataHora);
+				$reinicio = new DateTime($retorno[0]->dataHora);
+				$fim = new DateTime($saida[0]->dataHora);
+				//echo $inicio.$fim;
+				/*$inicio = DateTime::createFromFormat('d/m/Y H:i:s', $inicio);
+				$fim = DateTime::createFromFormat('d/m/Y H:i:s', $fim);*/
+				$periodo01 = $inicio->diff($pausa);
+				$periodo02 = $reinicio->diff($fim);
+
+				$value01 = $periodo01->format('%H:%I:%S');
+				$value02 = $periodo02->format('%H:%I:%S');
+				$total = sum_time($value01, $value02);
+
+				$var01 = strtotime($total);
+				$var02 = strtotime('08:00:00');
+
+				if ($var01 > $var02)
+				{
+					$dif = sub_time($total, '08:00:00');
+					echo '<td align="center" style="border:none"> 08:00:00</td>';
+					echo '<td align="center" style="border:none"> + '.$dif.'</td>';
+				} else {
+					$dif = sub_time('08:00:00',$total);
+					echo '<td align="center" style="border:none"> '.$total.'</td>';
+					echo '<td align="center" style="border:none"> - '.$dif.'</td>';
+				}
+
+				//echo '<td align="center" style="border:none"> '.$total.'</td>';
+			} else {
+				echo '<td align="center" style="border:none"> --:--:--</td>';
+				echo '<td align="center" style="border:none"> --:--:--</td>';
+			}
+		}
+
 		public function showItinerary()
 		{
 			$dao  = new DAO();
-			$wq = $dao->get("Users", $_SESSION['user_id']);	
+			$wq = $dao->get("Users", $_SESSION['user_id']);
 			$it = $wq->rel['itineraries'];
 			$result = '<span class="label label-success"><i class="icon-arrow-up"></i>  ENTRADA</span> '.$It->entrada.' <span class="label label-gray"><i class="icon-arrow-down"></i>  INTERVALO</span> ['.$It->intervalo.'] <span class="label label-info"><i class="icon-arrow-up"></i>  RETORNO</span> ['.$It->retorno.'] <span class="label label-success"><i class="icon-arrow-down"></i>  SAIDA</span> ['.$It->saida.'] ';
 			return  $It->entrada;
 		}
 
-		public function nowRegister($data=NULL) 
+		public function nowRegister($data=NULL)
 		{
 			$dao  = new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
-			
+
 			echo '
 				<table class="table-normal responsive">
 					<thead>
@@ -351,25 +400,24 @@
 				echo '<tbody>';
 			if ($data != NULL) {
 				$hoje = $data;
-			}else{
+			}else
+			{
 				$hoje = date('Y-m-d');
 			}
-			foreach ($Users as  $usuario) 
-			{	
+			foreach ($Users as  $usuario)
+			{
 				$nome = "";
-				if ($usuario->nome != '') 
+				if ($usuario->nome != '')
 				{
 					$array=explode(" ",$usuario->nome);
-					if ($array[1]) 
+					if ($array[1])
 					{
-						$nome = $array[0].' '.$array[1];	
-					}
-					else
+						$nome = $array[0].' '.$array[1];
+					}else
 					{
 						$nome = $usuario->nome;
 					}
-				}
-				else
+				}else
 				{
 					$nome = " ";
 				}
@@ -390,26 +438,23 @@
 				where records.data = '".$hoje."' AND records.user_id = ".$usuario->id." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';}
 				echo '</tr>';
 			}
-
 			echo"</tbody>";
 			echo"</table>";
 		}
-		
+
 		public function primeSegName($nome)
 		{
-			if ($nome != '') 
+			if ($nome != '')
 			{
 				$array=explode(" ",$nome);
-				if ($array[1]) 
+				if ($array[1])
 				{
-					echo $array[0].' '.$array[1];	
-				}
-				else
+					echo $array[0].' '.$array[1];
+				}else
 				{
 					echo $nome;
 				}
-			}
-			else
+			}else
 			{
 				echo " ";
 			}
@@ -419,7 +464,7 @@
 		{
 			$dao  = new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
-			
+
 			$this-> totalAtrasosPorMes();
 			echo "
 			$(function () {
@@ -462,22 +507,20 @@
 			echo "['<b style=\"color:blue\">Dias Trabalhaveis</b>', ".$this->diasTrabalhaveis()."],";
 			$result = count($Users);
 			$js = "";
-			foreach ($Users as  $usuario) 
+			foreach ($Users as  $usuario)
 			{
 				$nome = "";
-				if ($usuario->nome != '') 
+				if ($usuario->nome != '')
 				{
 					$array=explode(" ",$usuario->nome);
-					if ($array[1]) 
+					if ($array[1])
 					{
-						$nome = $array[0].' '.$array[1];	
-					}
-					else
+						$nome = $array[0].' '.$array[1];
+					}else
 					{
 						$nome = $usuario->nome;
 					}
-				}
-				else
+				}else
 				{
 					$nome = " ";
 				}
@@ -489,7 +532,7 @@
 				}
 			}
 			echo $js;
-			echo"               
+			echo"
 			],
 			dataLabels: {
 			enabled: true,
@@ -547,11 +590,11 @@
 			echo "data: [";
 			$var = 12;
 			$js = "";
-			for ($i=0; $i < 12; $i++) { 
+			for ($i=0; $i < 12; $i++) {
 				$mes = $i+1;
 				$ano = date('Y');
 				$dia = date("t", mktime(0, 0, 0, $mes, 1, $ano));
-				
+
 				$js .=  $this->totalAtrasosPorMesAno($dia,$mes);
 				if ($i != 11) {
 					$js .= ",";
@@ -561,10 +604,10 @@
 			echo"]
 			}]
 			});
-			});";			
+			});";
 
 		}
-		
+
 		public function mediaRegistroForFaltasUsuario()
 		{
 			$dao 	= new DAO();
@@ -698,10 +741,10 @@
 			echo"]
 			}]
 			});
-			});";			
+			});";
 
 		}
-		
+
 		function verificarRegistroCompleto($data=NULL, $user=NULL,$model=TRUE)
 		{
 			$dao  	 = new DAO();
@@ -714,8 +757,8 @@
 				if($data != NULL && $user != NULL)
 				{
 					if($ent = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = '".$data."' AND records.reason_id = 1 AND records.user_id = ".$user." "))
-					{	
-						$e 	= true;	
+					{
+						$e 	= true;
 					}
 					if($int = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = '".$data."' AND records.reason_id = 2 AND records.user_id = ".$user." "))
 					{
@@ -729,46 +772,53 @@
 					{
 						$s 	= true;
 					}
-				
+
 				}
-				if ($model) {
-					if ($e == true && $i == true && $r == true && $s == true) {
+				if ($model)
+				{
+					if ($e == true && $i == true && $r == true && $s == true)
+					{
 						return  true;
-					}else{
+					}else
+					{
 						return false;
 					}
-				}else{
-					if ($e == false) {
+				}else
+				{
+					if ($e == false)
+					{
 						return  true;
-					}else{
+					}else
+					{
 						return false;
 					}
 				}
-			}else{
+			}else
+			{
 				return false;
 			}
 		}
-		
+
 		function calendarioMesnsal($usuario=NULL)
-		{	
+		{
 			$mes = null;
 			$ano = null;
 			$mes = !$mes ? date('m') : $mes;
 			$ano = !$ano ? date('Y') : $ano;
 			$dia = 1;
 			$totalRegistros = 0;
-			while ($dia <= cal_days_in_month(1, $mes, $ano) ) 
-			{	
-				for ( $i = 0; $i <= 6; $i++ ) 
+			while ($dia <= cal_days_in_month(1, $mes, $ano) )
+			{
+				for ( $i = 0; $i <= 6; $i++ )
 				{
-					if ( $dia <= cal_days_in_month(1, $mes, $ano) ) 
+					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
 					{
-						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i ) 
+						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
 						{
 							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
 							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
 							$dataVar = $ano."-".$mes."-".$dia;
-							if ($this->verificarRegistroCompleto($dataVar, $usuario, TRUE)) 
+							if ($this->verificarRegistroCompleto($dataVar, $usuario, TRUE))
 							{
 								$totalRegistros = $totalRegistros+1;
 							}
@@ -777,12 +827,11 @@
 					}
 				}
 			}
-			
 			return $totalRegistros;
 		}
 
 		function calendarioMesnsalFaltas($usuario=NULL,$mesPesquisa=NULL)
-		{	
+		{
 			$mes = $mesPesquisa;
 			$ano = null;
 			if ($mes == null) {
@@ -791,20 +840,20 @@
 			$ano = !$ano ? date('Y') : $ano;
 			$dia = 1;
 			$totalRegistros = 0;
-			while ($dia <= cal_days_in_month(1, $mes, $ano) ) 
-			{	
-				for ( $i = 0; $i <= 6; $i++ ) 
+			while ($dia <= cal_days_in_month(1, $mes, $ano) )
+			{
+				for ( $i = 0; $i <= 6; $i++ )
 				{
-					if ( $dia <= cal_days_in_month(1, $mes, $ano) ) 
+					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
 					{
-						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i ) 
+						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
 						{
 							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
 							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
 							$dataVar = $ano."-".$mes."-".$dia;
-							if (!$this->fimDeSemanaAtual($dataVar)) 
+							if (!$this->fimDeSemanaAtual($dataVar))
 							{
-								if ($this->verificarRegistroCompleto($dataVar, $usuario, FALSE)) 
+								if ($this->verificarRegistroCompleto($dataVar, $usuario, FALSE))
 								{
 									$totalRegistros = $totalRegistros+1;
 								}
@@ -814,10 +863,10 @@
 					}
 				}
 			}
-			
+
 			return $totalRegistros;
 		}
-		
+
 		public function diasTrabalhaveis()
 		{
 			$mes = null;
@@ -826,18 +875,18 @@
 			$ano = !$ano ? date('Y') : $ano;
 			$dia = 1;
 			$totalRegistros = 0;
-			while ($dia <= cal_days_in_month(1, $mes, $ano) ) 
-			{	
-				for ( $i = 0; $i <= 6; $i++ ) 
+			while ($dia <= cal_days_in_month(1, $mes, $ano) )
+			{
+				for ( $i = 0; $i <= 6; $i++ )
 				{
-					if ( $dia <= cal_days_in_month(1, $mes, $ano) ) 
+					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
 					{
-						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i ) 
+						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
 						{
 							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
 							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
 							$dataVar = $ano."-".$mes."-".$dia;
-							if ($this->fimDeSemanaAtual($dataVar)) 
+							if ($this->fimDeSemanaAtual($dataVar))
 							{
 								$totalRegistros = $totalRegistros+1;
 							}
@@ -851,7 +900,7 @@
 		}
 
 		public function totalAtrasosPorMes($userId=4)
-		{	
+		{
 			$dao 		= new DAO();
 			$user		= $userId;
 			$dataInicio = date('Y')."-".date('m')."-01";
@@ -860,21 +909,23 @@
 			INNER JOIN reasons rs ON rs.id = r.reason_id
 			INNER JOIN users u ON u.id = r.user_id
 			INNER JOIN itineraries i ON i.id = u.itineraries_id
-			WHERE r.reason_id = 1 
+			WHERE r.reason_id = 1
 			AND r.user_id = {$user}
 			AND r.hora > (ADDTIME(i.entrada, '00:15:00'))
 			AND r.data BETWEEN '{$dataInicio}' AND '{$dataFinal}'";
 			$count = 0;
 			$count = $dao->SQLcount($sql);
-			if ($count) {
+			if ($count)
+			{
 				return $count;
-			}else{
+			}else
+			{
 				return 0;
 			}
 		}
 
 		public function totalAtrasosPorMesAno($dia,$mes)
-		{	
+		{
 			$dao 		= new DAO();
 			$user		= $userId;
 			$dataInicio = date('Y')."-".$mes."-01";
@@ -883,14 +934,16 @@
 			INNER JOIN reasons rs ON rs.id = r.reason_id
 			INNER JOIN users u ON u.id = r.user_id
 			INNER JOIN itineraries i ON i.id = u.itineraries_id
-			WHERE r.reason_id = 1 
+			WHERE r.reason_id = 1
 			AND r.hora > (ADDTIME(i.entrada, '00:15:00'))
 			AND r.data BETWEEN '{$dataInicio}' AND '{$dataFinal}'";
 			$count = 0;
 			$count = $dao->SQLcount($sql);
-			if ($count) {
+			if ($count)
+			{
 				return $count;
-			}else{
+			}else
+			{
 				return 0;
 			}
 		}
@@ -900,8 +953,8 @@
 			$dao 	= new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
 			$total = 0;
-			foreach ($Users as  $usuario) 
-			{	
+			foreach ($Users as  $usuario)
+			{
 				$total = $total + $this->totalAtrasosPorMes($usuario->id);
 			}
 			echo '<div class="well" align="center">
@@ -916,15 +969,15 @@
 					</thead>
 				';
 				echo '<tbody>';
-					foreach ($Users as  $usuario) 
-					{	
+					foreach ($Users as  $usuario)
+					{
 						$nome = "";
-						if ($usuario->nome != '') 
+						if ($usuario->nome != '')
 						{
 							$array=explode(" ",$usuario->nome);
-							if ($array[1]) 
+							if ($array[1])
 							{
-								$nome = $array[0].' '.$array[1];	
+								$nome = $array[0].' '.$array[1];
 							}
 							else
 							{
@@ -956,14 +1009,14 @@
 				return false;
 			}
 		}
-		
+
 		public function totalFaltasPorUser()
 		{
 			$dao 	= new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
 			$total = 0;
-			foreach ($Users as  $usuario) 
-			{	
+			foreach ($Users as  $usuario)
+			{
 				$total = $total + $this->calendarioMesnsalFaltas($usuario->id);
 			}
 			echo '<div class="well" align="center">
@@ -978,15 +1031,15 @@
 					</thead>
 				';
 				echo '<tbody>';
-					foreach ($Users as  $usuario) 
-					{	
+					foreach ($Users as  $usuario)
+					{
 						$nome = "";
-						if ($usuario->nome != '') 
+						if ($usuario->nome != '')
 						{
 							$array=explode(" ",$usuario->nome);
-							if ($array[1]) 
+							if ($array[1])
 							{
-								$nome = $array[0].' '.$array[1];	
+								$nome = $array[0].' '.$array[1];
 							}
 							else
 							{
@@ -1007,21 +1060,21 @@
 			echo '</table>';
 			echo '</div>';
 		}
-		
+
 		public function statusUserNow()
 		{
 			$dao 	= new DAO();
 			$Users = $dao->Retrieve("Users", " ORDER BY nome ");
 			$total = 0;
-			foreach ($Users as  $usuario) 
-			{	
+			foreach ($Users as  $usuario)
+			{
 				$nome = "";
-				if ($usuario->nome != '') 
+				if ($usuario->nome != '')
 				{
 					$array=explode(" ",$usuario->nome);
-					if ($array[1]) 
+					if ($array[1])
 					{
-						$nome = $array[0].' '.$array[1];	
+						$nome = $array[0].' '.$array[1];
 					}
 					else
 					{
@@ -1036,7 +1089,7 @@
 				echo '<li><a href="#"><span style="min-width:220px;"><strong>'.$nome. '</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="min-width:220px;">'.$count.'</span></a></li>';
 			}
 		}
-	
+
 		public function nowRegisterForUser($userId)
 		{
 			$dao 	 = new DAO();
@@ -1072,13 +1125,13 @@
 					elseif($var == "EXTRA-FIM")
 					{
 						return '<span class="label" title="Registro de Saida de Hora Extra" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-arrow-down"></i> FIM EXTRA</span>';
-					}	
+					}
 				}else{
 					return '<span class="label" style="background-color:#890575" title="Sem Registro" OnMouseOver="this.style.cursor=\'pointer\';"><i class="icon-ban-circle"></i> SEM RESGISTRO</span>';
 				}
 			}
-		}	
-		
+		}
+
 		public static function authentication()
 		{
 			// variáveis globais a serem usadas, basicamente são sempre essas
@@ -1109,6 +1162,26 @@
 				}
 			}
 			return false;
+		}
+
+		public  function timeForFinish()
+		{
+			$dao 	= new DAO();
+			$data 	= date('Y-m-d');
+			$user 	= $_SESSION['user_id'];
+			$entradaNow = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = '".$data."' AND records.reason_id = 1 AND records.user_id = ".$user." ");
+			if ($entradaNow) {
+				$data_chegada = date('m/d/Y H:i:s', strtotime('+8 hour', strtotime($entradaNow[0]->dataHora)));
+				echo ", beforeDateTime:'".$data_chegada."'";
+			} else {
+				echo ", showSecond:false, tick:function(){return new Date('00,00,00');}";
+			}
+		}
+
+		public  function timeForServidor()
+		{
+			$dataHoraServidor = date('m/d/Y H:i:s');
+			echo $dataHoraServidor;
 		}
 	}
 ?>

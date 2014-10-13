@@ -42,7 +42,7 @@ define('POPCONTA', "gmail.com");
 
 // database config
 define('HOST', 'localhost');
-define('DATABASE', 'clock');
+define('DATABASE', 'clock_indra');
 define('USERNAME', 'root');
 define('PASSWORD', 'admin');
 

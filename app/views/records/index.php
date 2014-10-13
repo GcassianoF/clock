@@ -8,7 +8,7 @@
 			$records_controller = new Records_Controller();
 			$records_controller->add();
 			$Users = $dao->Retrieve("Users", "ORDER BY id");
-			$Reasons = $dao->Retrieve("Reasons", "ORDER BY id");
+			$Reasons = $dao->Retrieve("Reasons", "WHERE reasons.deleted_at IS NULL ORDER BY id");
 			if (array_key_exists('deleted', $_SESSION))
 			{
 				$MSG->success[] = "Records Excluido.";
@@ -17,7 +17,7 @@
 		?>
 		<script type="text/javascript">
 			function enviar_formulario()
-			{ 
+			{
 				var formulario = document.getElementById('formAu');
 				document.getElementById('Record_pwd').value = document.getElementById('Session_pwd').value;
 				formulario.submit();
@@ -33,8 +33,9 @@
 				<ul>
 					<?$records_controller->statusUserNow();?>
 				</ul>
-				<div class="bn-arrows"><span class="bn-arrows-left"></span><span class="bn-arrows-right"></span></div>	
+				<div class="bn-arrows"><span class="bn-arrows-left"></span><span class="bn-arrows-right"></span></div>
 			</div>
+
 			<?bar($icon="icon-calendar", $titulo="Calendario Mensal", $descricao="Calendario mensal com as horas registradas por dia.");?>
 			<?Menus_Controller::breadcrumbs("Registro de Horas", "icon-time", null, null, null);?>
 			<?default_messages()?>
@@ -46,16 +47,16 @@
 					<?HTML::span_END();?>
 				<?HTML::row_END();?>
 				<?HTML::row_START("row-fluid");?>
-					<?HTML::span_START("4","","");?>
-						<?HTML::box_START("icon-time", "Novo Registro de Horas");?>
-							<?$form = new Form_html(array('class'=>'form-horizontal fill-up validatable','id'=>'formAu'));
+					<?HTML::span_START("12","","");?>
+						<?HTML::box_START("icon-time", "Registro de Horas");?>
+							<?$form = new Form_html(array('class'=>'form-vertical fill-up validatable','id'=>'formAu'));
 							$form->Start();?>
  								<?Form_html::form_START()?>
 									<?$form->InputGroup_Start("Registrar")?>
-										<?$form->Select($Reasons, array('class'=>'chzn-select span12','id'=>'Record_reasons'), 'Record', 'reason_id', 'descricao')?>										
+										<?$form->Select($Reasons, array('class'=>'chzn-select span12','id'=>'Record_reasons'), 'Record', 'reason_id', 'descricao')?>
 									<?$form->InputGroup_End()?>
 									<?$form->InputGroup_Start("Justificativa")?>
-										<?$form->TextArea(array('type'=>'text', 'class'=>'span12', 'rows'=>'7', 'cols'=>'50'), 'Record', 'justificativa')?>
+										<?$form->TextArea(array('type'=>'text', 'class'=>'span12', 'rows'=>'7', 'cols'=>'10'), 'Record', 'justificativa')?>
 									<?$form->InputGroup_End()?>
 									<?$form->InputGroup_Start("")?>
 										<?$form->Input(array('type'=>'hidden', 'class'=>'span8','id'=>'Record_pwd'), 'Record', 'pwd')?>
@@ -68,11 +69,13 @@
 							<?$form->End()?>
 						<?HTML::box_END();?>
 					<?HTML::span_END();?>
-					<?HTML::span_START("8");?>
+				<?HTML::row_END();?>
+				<?HTML::row_START("row-fluid");?>
+					<?HTML::span_START("12");?>
 						<?HTML::box_START("", "<i class='icon-calendar'></i>  <strong>Calendario Mensal</strong>");?>
 							<?$records_controller->impr_calendar();?>
 							<?Form_html::form_actions_START()?>
-		
+
 							<?Form_html::form_actions_END()?>
 						<?HTML::box_END();?>
 					<?HTML::span_END();?>
@@ -95,9 +98,9 @@
 			                                <span class="add-on" href="#"><i class="icon-key"></i></span>
 			                                <?php $form->Input(array('type'=>'password', 'placeholder'=>'Senha', 'style'=>'width:300px;','id'=>'Session_pwd'), 'Session', 'senha')?>
 			                                <button type="submit" class="btn btn-blue " onclick="enviar_formulario();" style="height:35px">Autenticar <i class="icon-signin"></i></button>
-			                            </div> 
+			                            </div>
 			                        <?Form_html::form_END()?>
-			                    <?$form->End()?>    
+			                    <?$form->End()?>
 			            </div>
 			        </div>
 			        <div class="modal-footer">
@@ -114,7 +117,6 @@
 				$('#confirmation_modal_record').modal({show: true});
 				$('#confirm_danger_record').click(function(e)
 				{
-					//window.location = href;
 					e.preventDefault();
 				});
 				e.preventDefault();
@@ -124,19 +126,19 @@
 			$("#breakingnews").BreakingNews
 			({
 				background	: 	'#FBFBFB',
-				title		   	: 	'Situação Atual dos Usuarios',
+				title		   		: 	'Situação Atual dos Usuarios',
 				titlecolor	   	:  	'#FFF',
 				titlebgcolor	   	: 	'#151B20',
 				linkcolor	   	: 	'#333',
 				linkhovercolor	: 	'#CC0C35',
 				fonttextsize	   	: 	13,
 				isbold		   	: 	false,
-				border	   	: 	'solid 2px #EEEEEF',
+				border	   		: 	'solid 2px #EEEEEF',
 				width			: 	'100%',
 				timer			: 	2000,
 				autoplay		: 	true,
 				effect			: 	'slide'
-			});   
+			});
 		</script>
 	</body>
 </html>

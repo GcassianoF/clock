@@ -49,7 +49,6 @@
 					</ul>
 					<div class="bn-arrows"><span class="bn-arrows-left"></span><span class="bn-arrows-right"></span></div>	
 				</div>
-				<?Menus_Controller::breadcrumbs("", "", null, null, null);?>
 				<?default_messages()?>
 				<?HTML::container_START("container-fluid padded");?>
 					<?HTML::row_START("row-fluid");?>
