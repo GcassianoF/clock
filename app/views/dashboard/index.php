@@ -47,7 +47,7 @@
 					<ul>
 						<?$records_controller->statusUserNow();?>
 					</ul>
-					<div class="bn-arrows"><span class="bn-arrows-left"></span><span class="bn-arrows-right"></span></div>	
+					<div class="bn-arrows"><span class="bn-arrows-left"></span><span class="bn-arrows-right"></span></div>
 				</div>
 				<?bar($icon="icon-dashboard", $titulo="Dashboard", $descricao="Calendario mensal com as horas registradas por dia.");?>
 				<?default_messages()?>
@@ -55,148 +55,7 @@
 					<?HTML::row_START("row-fluid");?>
 						<?HTML::span_START("12");?>
 							<div class="box">
-								<div class="box-header">
-									<ul class="nav nav-tabs nav-tabs-left">
-										<li class="active">
-											<a href="#d001" class="" data-toggle="tab" >
-												<span class="label label-black">
-													<?=date('d/m/Y');?>
-												</span>
-											</a>
-										</li>
-										<li class="">
-											<a href="#d002" data-toggle="tab">
-												<span class="label label-black">
-													<?
-														$totime = strtotime("-1 days");
-														$time = date("d/m/Y",$totime);
-														echo $time;
-													?>
-												</span>
-											</a>
-										</li>
-										<li class="">
-											<a href="#d003" data-toggle="tab">
-												<span class="label label-black">
-													<?
-														$totime = strtotime("-2 days");
-														$time = date("d/m/Y",$totime);
-														echo $time;
-													?>
-												</span>
-											</a>
-										</li>
-										<li class="">
-											<a href="#d004" data-toggle="tab">
-												<span class="label label-black">
-													<?
-														$totime = strtotime("-3 days");
-														$time = date("d/m/Y",$totime);
-														echo $time;
-													?>
-												</span>
-											</a>
-										</li>
-										<li class="">
-											<a href="#d005" data-toggle="tab">
-												<span class="label label-black">
-													<?
-														$totime = strtotime("-4 days");
-														$time = date("d/m/Y",$totime);
-														echo $time;
-													?>
-												</span>
-											</a>
-										</li>
-									</ul>
-									<div class="title">Registro dos 5 ultimos dias</div>
-								</div>
-								<div class="box-content" style="font-size:0.85em">
-									<div class="tab-content">
-										<div class="tab-pane active" id="d001">
-											<br/>
-											<div align="center" class="well">
-												<span class="pull-right label label-blue"><?=date('d/m/Y');?></span>
-												<legend>Registro Diario</legend>
-												<br/>
-													<?$records_controller->nowRegister();?>
-												<br/>
-											</div>
-										</div>
-										<div class="tab-pane" id="d002">
-											<br/>
-											<div align="center" class="well">
-												<span class="pull-right label label-blue">
-													<?
-														$totime = strtotime("-1 days");
-														$time = date("d/m/Y",$totime);
-														$obj = explode("/", $time);
-														$var = $obj[2]."-".$obj[1]."-".$obj[0];
-														echo $time;
-														echo '</span>';
-														echo '<legend>Registro Diario</legend>';
-														echo '<br/>';
-														$records_controller->nowRegister($var);
-													?>
-												<br/>
-											</div>
-										</div>
-										<div class="tab-pane" id="d003">
-											<br/>
-											<div align="center" class="well">
-												<span class="pull-right label label-blue">
-													<?
-														$totime = strtotime("-2 days");
-														$time = date("d/m/Y",$totime);
-														$obj = explode("/", $time);
-														$var = $obj[2]."-".$obj[1]."-".$obj[0];
-														echo $time;
-														echo '</span>';
-														echo '<legend>Registro Diario</legend>';
-														echo '<br/>';
-														$records_controller->nowRegister($var);
-													?>
-												<br/>
-											</div>
-										</div>
-										<div class="tab-pane" id="d004">
-											<br/>
-											<div align="center" class="well">
-												<span class="pull-right label label-blue">
-													<?
-														$totime = strtotime("-3 days");
-														$time = date("d/m/Y",$totime);
-														$obj = explode("/", $time);
-														$var = $obj[2]."-".$obj[1]."-".$obj[0];
-														echo $time;
-														echo '</span>';
-														echo '<legend>Registro Diario</legend>';
-														echo '<br/>';
-														$records_controller->nowRegister($var);
-													?>
-												<br/>
-											</div>
-										</div>
-										<div class="tab-pane" id="d005">
-											<br/>
-											<div align="center" class="well">
-												<span class="pull-right label label-blue">
-													<?
-														$totime = strtotime("-4 days");
-														$time = date("d/m/Y",$totime);
-														$obj = explode("/", $time);
-														$var = $obj[2]."-".$obj[1]."-".$obj[0];
-														echo $time;
-														echo '</span>';
-														echo '<legend>Registro Diario</legend>';
-														echo '<br/>';
-														$records_controller->nowRegister($var);
-													?>
-												<br/>
-											</div>
-										</div>
-									</div>
-								</div>
+								<?$records_controller->calendarioDash();?>
 								<div class="box-footer padded">
 
 								</div>
@@ -208,7 +67,7 @@
 									<span class="title"> <b><?=date('d/m/Y');?></b></span>
 								</div>
 								<div class="box-content padded">
-									
+
 								</div>
 								<div class="box-footer padded">
 
@@ -308,7 +167,7 @@
 					timer			: 	2000,
 					autoplay		: 	true,
 					effect			: 	'slide'
-				});   
+				});
 			</script>
 		<!-- FIM CENTER MASTER -->
 	</body>
