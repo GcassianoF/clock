@@ -326,141 +326,276 @@
 			</div></div>';
 		}
 
-		public function calendarioDash( $mes='', $ano='')
+		public function calendarioDash($mes='', $ano='')
 		{
-			$dao  = new DAO();
-			$mes = !$mes ? date('m') : $mes;
-			$ano = !$ano ? date('Y') : $ano;
-
-			echo
-			'
-				<div class="box-header">
-					<ul class="nav nav-tabs nav-tabs-left">
-			';
-			$dia = 1;
-
-			while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+			if($_GET)
 			{
-				for ( $i = 0; $i <= 6; $i++ )
+				$dao  = new DAO();
+				$mes = $_GET['codigo'];
+				$ano = !$ano ? date('Y') : $ano;
+
+				echo
+				'
+					<div class="box-header">
+						<ul class="nav nav-tabs nav-tabs-left">
+				';
+				$dia = 1;
+				while ( $dia <= cal_days_in_month(1, $mes, $ano) )
 				{
-					$entrada	 = null;
-					$intervalo	 = null;
-					$retorno	 = null;
-					$saida	 	 = null;
-					$diaExtenso = null;
-					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
+					for ( $i = 0; $i <= 6; $i++ )
 					{
-						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+						$entrada	 = null;
+						$intervalo	 = null;
+						$retorno	 = null;
+						$saida	 	 = null;
+						$diaExtenso = null;
+						if ( $dia <= cal_days_in_month(1, $mes, $ano) )
 						{
-							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
-							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
+							if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+							{
+								$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
+								$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
 
-							if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
-							{
-								echo
-								'	<li class="active">
-										<a href="#d00'.$dia.'" class="" data-toggle="tab" >
-											<span class="label label-red">
-												'.$dia.'/'.$mes.'/'.$ano.'
-											</span>
-										</a>
-									</li>
-								';
-							}else
-							{
-								echo
-								'	<li class="">
-										<a href="#d00'.$dia.'" class="" data-toggle="tab" >
-											<span class="label label-black">
-												'.$dia.'/'.$mes.'/'.$ano.'
-											</span>
-										</a>
-									</li>
-								';
+								if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
+								{
+									echo
+									'	<li class="active">
+											<a href="#d00'.$dia.'" class="" data-toggle="tab" >
+												<span class="label label-red">
+													'.$dia.'/'.$mes.'/'.$ano.'
+												</span>
+											</a>
+										</li>
+									';
+								}else
+								{
+									echo
+									'	<li class="">
+											<a href="#d00'.$dia.'" class="" data-toggle="tab" >
+												<span class="label label-black">
+													'.$dia.'/'.$mes.'/'.$ano.'
+												</span>
+											</a>
+										</li>
+									';
+								}
+
+								$dia++;
 							}
-
-							$dia++;
 						}
 					}
 				}
-			}
 
-			$dia = 1;
+				$dia = 1;
 
 
-			echo
-			'
-					</ul>
-					<div class="title"><h4>'.$this->mesAtual().'</h4></div>
-				</div>
-				<div class="box-content" style="font-size:0.85em">
-					<div class="tab-content">
-			';
-
-			while ( $dia <= cal_days_in_month(1, $mes, $ano) )
-			{
-				for ( $i = 0; $i <= 6; $i++ )
-				{
-					$entrada	 = null;
-					$intervalo	 = null;
-					$retorno	 = null;
-					$saida	 	 = null;
-					$diaExtenso = null;
-					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
-					{
-						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
-						{
-							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
-							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
-
-							if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
-							{
-								echo
-								'
-									<div class="tab-pane active" id="d00'.$dia.'">
-										<br/>
-										<div align="center" class="well">
-											<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
-											<legend>Registro Diario</legend>
-											<br/>
-								';
-								$this->nowRegister($ano."-".$mes."-".$dia);
-								echo
-								'
-											<br/>
-										</div>
-									</div>
-								';
-							}else
-							{
-								echo
-								'
-									<div class="tab-pane" id="d00'.$dia.'">
-										<br/>
-										<div align="center" class="well">
-											<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
-											<legend>Registro Diario</legend>
-											<br/>
-								';
-								$this->nowRegister($ano."-".$mes."-".$dia);
-								echo
-								'
-											<br/>
-										</div>
-									</div>
-								';
-							}
-							$dia++;
-						}
-					}
-				}
-			}
-
-			echo
-			'
+				echo
+				'
+						</ul>
+						<div class="title"><h4>'.$this->mesAtual().'</h4></div>
 					</div>
-				</div>
-			';
+					<div class="box-content" style="font-size:0.85em">
+						<div class="tab-content">
+				';
+
+				while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+				{
+					for ( $i = 0; $i <= 6; $i++ )
+					{
+						$entrada	 = null;
+						$intervalo	 = null;
+						$retorno	 = null;
+						$saida	 	 = null;
+						$diaExtenso = null;
+						if ( $dia <= cal_days_in_month(1, $mes, $ano) )
+						{
+							if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+							{
+								$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
+								$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
+
+								if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
+								{
+									echo
+									'
+										<div class="tab-pane active" id="d00'.$dia.'">
+											<br/>
+											<div align="center" class="well">
+												<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
+												<legend>Registro Diario</legend>
+												<br/>
+									';
+									$this->nowRegister($ano."-".$mes."-".$dia);
+									echo
+									'
+												<br/>
+											</div>
+										</div>
+									';
+								}else
+								{
+									echo
+									'
+										<div class="tab-pane" id="d00'.$dia.'">
+											<br/>
+											<div align="center" class="well">
+												<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
+												<legend>Registro Diario</legend>
+												<br/>
+									';
+									$this->nowRegister($ano."-".$mes."-".$dia);
+									echo
+									'
+												<br/>
+											</div>
+										</div>
+									';
+								}
+								$dia++;
+							}
+						}
+					}
+				}
+
+				echo
+				'
+						</div>
+					</div>
+				';
+			}else{
+				$dao  = new DAO();
+				$mes = !$mes ? date('m') : $mes;
+				$ano = !$ano ? date('Y') : $ano;
+
+				echo
+				'
+					<div class="box-header">
+						<ul class="nav nav-tabs nav-tabs-left">
+				';
+				$dia = 1;
+				while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+				{
+					for ( $i = 0; $i <= 6; $i++ )
+					{
+						$entrada	 = null;
+						$intervalo	 = null;
+						$retorno	 = null;
+						$saida	 	 = null;
+						$diaExtenso = null;
+						if ( $dia <= cal_days_in_month(1, $mes, $ano) )
+						{
+							if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+							{
+								$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
+								$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
+
+								if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
+								{
+									echo
+									'	<li class="active">
+											<a href="#d00'.$dia.'" class="" data-toggle="tab" >
+												<span class="label label-red">
+													'.$dia.'/'.$mes.'/'.$ano.'
+												</span>
+											</a>
+										</li>
+									';
+								}else
+								{
+									echo
+									'	<li class="">
+											<a href="#d00'.$dia.'" class="" data-toggle="tab" >
+												<span class="label label-black">
+													'.$dia.'/'.$mes.'/'.$ano.'
+												</span>
+											</a>
+										</li>
+									';
+								}
+
+								$dia++;
+							}
+						}
+					}
+				}
+
+				$dia = 1;
+
+
+				echo
+				'
+						</ul>
+						<div class="title"><h4>'.$this->mesAtual().'</h4></div>
+					</div>
+					<div class="box-content" style="font-size:0.85em">
+						<div class="tab-content">
+				';
+
+				while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+				{
+					for ( $i = 0; $i <= 6; $i++ )
+					{
+						$entrada	 = null;
+						$intervalo	 = null;
+						$retorno	 = null;
+						$saida	 	 = null;
+						$diaExtenso = null;
+						if ( $dia <= cal_days_in_month(1, $mes, $ano) )
+						{
+							if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+							{
+								$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
+								$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
+
+								if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
+								{
+									echo
+									'
+										<div class="tab-pane active" id="d00'.$dia.'">
+											<br/>
+											<div align="center" class="well">
+												<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
+												<legend>Registro Diario</legend>
+												<br/>
+									';
+									$this->nowRegister($ano."-".$mes."-".$dia);
+									echo
+									'
+												<br/>
+											</div>
+										</div>
+									';
+								}else
+								{
+									echo
+									'
+										<div class="tab-pane" id="d00'.$dia.'">
+											<br/>
+											<div align="center" class="well">
+												<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
+												<legend>Registro Diario</legend>
+												<br/>
+									';
+									$this->nowRegister($ano."-".$mes."-".$dia);
+									echo
+									'
+												<br/>
+											</div>
+										</div>
+									';
+								}
+								$dia++;
+							}
+						}
+					}
+				}
+
+				echo
+				'
+						</div>
+					</div>
+				';
+			}
 		}
 
 		public function calcularTotalJob($data=NULL)

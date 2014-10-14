@@ -20,6 +20,7 @@
 			head('Painel');
 			auth("yes");
 			$records_controller = new Records_Controller();
+			//$meses = array('1' => 'Janeiro', '2' => 'Fevereiro', '3' => 'Março', '4' => 'Abril', '5' => 'Maio', '6' => 'Junho', '7' => 'Julho', '8' => 'Agosto', '9' => 'Setembro', '10' => 'Outubro', '11' => 'Novembro', '12' => 'Dezembro');
 		?>
 		<link href="<?=WEBROOT?>/plugins/css/maps/estilo.css" media="screen" rel="stylesheet" type="text/css" />
 		<style type="text/css">
@@ -55,25 +56,34 @@
 					<?HTML::row_START("row-fluid");?>
 						<?HTML::span_START("12");?>
 							<div class="box">
+								<div class="box-header">
+									<span class="title">Permições Por Paginas</span>
+								</div>
+								<div class="box-content">
+									<?php if ($meses = $dao->Retrieve('Months', 'ORDER BY codigo ASC')):?>
+										<?php $form = new Form_html(array('method'=>'get', 'id'=>'group_form'));
+										$form->Start()?>
+										<div class="padded">
+											<div class="control-group">
+												<label class="control-label">Selecione um Perfil</label>
+												<div class="controls">
+													<?php $form->Select($meses, array('class'=>'chzn-select', 'style'=>'width: 100%;', 'name'=>'codigo','id'=>'codigo'), 'Month', 'codigo', 'descricao', @$_GET['codigo'], false)?>
+												</div>
+											</div>
+										</div>
+										<?php $form->End()?>
+									<?php else:?>
+										<div class="alert alert-info">Sem grupos cadastrados</div>
+									<?php endif?>
+								</div>
+							</div>
+							<div class="box">
 								<?$records_controller->calendarioDash();?>
 								<div class="box-footer padded">
 
 								</div>
 							</div>
 						<?HTML::span_END();?>
-					<!--	<?HTML::span_START("3");?>
-							<div class="box" style="font-size:0.8em">
-								<div class="box-header">
-									<span class="title"> <b><?=date('d/m/Y');?></b></span>
-								</div>
-								<div class="box-content padded">
-
-								</div>
-								<div class="box-footer padded">
-
-								</div>
-							</div>
-						<?HTML::span_END();?> -->
 					<?HTML::row_END();?>
 					<?HTML::row_START("row-fluid");?>
 						<?HTML::span_START("6");?>
@@ -169,6 +179,17 @@
 					effect			: 	'slide'
 				});
 			</script>
+			<script type="text/javascript">
+			$(document).ready(function(){
+				$('#codigo').change(function(){
+			    	if ($(this).val())
+			    	{
+			        	$("#group_form").submit();
+			    	}
+			    		return false;
+				});
+			});
+		</script>
 		<!-- FIM CENTER MASTER -->
 	</body>
 </html>
