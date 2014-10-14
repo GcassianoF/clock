@@ -326,6 +326,143 @@
 			</div></div>';
 		}
 
+		public function calendarioDash( $mes='', $ano='')
+		{
+			$dao  = new DAO();
+			$mes = !$mes ? date('m') : $mes;
+			$ano = !$ano ? date('Y') : $ano;
+
+			echo
+			'
+				<div class="box-header">
+					<ul class="nav nav-tabs nav-tabs-left">
+			';
+			$dia = 1;
+
+			while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+			{
+				for ( $i = 0; $i <= 6; $i++ )
+				{
+					$entrada	 = null;
+					$intervalo	 = null;
+					$retorno	 = null;
+					$saida	 	 = null;
+					$diaExtenso = null;
+					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
+					{
+						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+						{
+							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
+							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
+
+							if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
+							{
+								echo
+								'	<li class="active">
+										<a href="#d00'.$dia.'" class="" data-toggle="tab" >
+											<span class="label label-red">
+												'.$dia.'/'.$mes.'/'.$ano.'
+											</span>
+										</a>
+									</li>
+								';
+							}else
+							{
+								echo
+								'	<li class="">
+										<a href="#d00'.$dia.'" class="" data-toggle="tab" >
+											<span class="label label-black">
+												'.$dia.'/'.$mes.'/'.$ano.'
+											</span>
+										</a>
+									</li>
+								';
+							}
+
+							$dia++;
+						}
+					}
+				}
+			}
+
+			$dia = 1;
+
+
+			echo
+			'
+					</ul>
+					<div class="title"><h4>'.$this->mesAtual().'</h4></div>
+				</div>
+				<div class="box-content" style="font-size:0.85em">
+					<div class="tab-content">
+			';
+
+			while ( $dia <= cal_days_in_month(1, $mes, $ano) )
+			{
+				for ( $i = 0; $i <= 6; $i++ )
+				{
+					$entrada	 = null;
+					$intervalo	 = null;
+					$retorno	 = null;
+					$saida	 	 = null;
+					$diaExtenso = null;
+					if ( $dia <= cal_days_in_month(1, $mes, $ano) )
+					{
+						if ( date('w', mktime(0,0,0,$mes,$dia,$ano)) == $i )
+						{
+							$dia = strlen($dia) <= 1 ? 0 . $dia : $dia;
+							$mes = strlen($mes) <= 1 ? 0 . $mes : $mes;
+
+							if ($dia == date('d') && $mes == date('m') && $ano == date('Y'))
+							{
+								echo
+								'
+									<div class="tab-pane active" id="d00'.$dia.'">
+										<br/>
+										<div align="center" class="well">
+											<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
+											<legend>Registro Diario</legend>
+											<br/>
+								';
+								$this->nowRegister($ano."-".$mes."-".$dia);
+								echo
+								'
+											<br/>
+										</div>
+									</div>
+								';
+							}else
+							{
+								echo
+								'
+									<div class="tab-pane" id="d00'.$dia.'">
+										<br/>
+										<div align="center" class="well">
+											<span class="pull-right label label-blue">'.$dia.'/'.$mes.'/'.$ano.'</span>
+											<legend>Registro Diario</legend>
+											<br/>
+								';
+								$this->nowRegister($ano."-".$mes."-".$dia);
+								echo
+								'
+											<br/>
+										</div>
+									</div>
+								';
+							}
+							$dia++;
+						}
+					}
+				}
+			}
+
+			echo
+			'
+					</div>
+				</div>
+			';
+		}
+
 		public function calcularTotalJob($data=NULL)
 		{
 			$dao  		= new DAO();
@@ -369,6 +506,49 @@
 			}
 		}
 
+		public function calcularTotalJobResult($data=NULL, $user=NULL)
+		{
+			$dao = new DAO();
+			if (($entrada = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$user." AND r.descricao = 'ENTRADA' AND records.deleted_at IS NULL"))
+				&& ($intervalo = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$user." AND r.descricao = 'INTERVALO' AND records.deleted_at IS NULL"))
+				&& ($retorno  = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$user." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL"))
+				&& ($saida = $dao->get("Records", " INNER JOIN reasons r ON r.id=records.reason_id WHERE records.data = '".$data."' AND records.user_id = ".$user." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")))
+			{
+				$inicio = new DateTime($entrada[0]->dataHora);
+				$pausa = new DateTime($intervalo[0]->dataHora);
+				$reinicio = new DateTime($retorno[0]->dataHora);
+				$fim = new DateTime($saida[0]->dataHora);
+				//echo $inicio.$fim;
+				/*$inicio = DateTime::createFromFormat('d/m/Y H:i:s', $inicio);
+				$fim = DateTime::createFromFormat('d/m/Y H:i:s', $fim);*/
+				$periodo01 = $inicio->diff($pausa);
+				$periodo02 = $reinicio->diff($fim);
+
+				$value01 = $periodo01->format('%H:%I:%S');
+				$value02 = $periodo02->format('%H:%I:%S');
+				$total = sum_time($value01, $value02);
+
+				$var01 = strtotime($total);
+				$var02 = strtotime('08:00:00');
+
+				if ($var01 > $var02)
+				{
+					$dif = sub_time($total, '08:00:00');
+					echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;font-weight:bold"> 08:00:00</td>';
+					echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;color:#468847;font-weight:bold"> + '.$dif.'</td>';
+				} else {
+					$dif = sub_time('08:00:00',$total);
+					echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;font-weight:bold"> '.$total.'</td>';
+					echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;color:#B94A48;font-weight:bold"> - '.$dif.'</td>';
+				}
+
+				//echo '<td align="center" style="border:none"> '.$total.'</td>';
+			} else {
+				echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';
+				echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';
+			}
+		}
+
 		public function showItinerary()
 		{
 			$dao  = new DAO();
@@ -392,8 +572,8 @@
 							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:95px;height:30px"><span class="label label-gray" style="font-weight: normal;width:80px"><i class="icon-arrow-down"></i>  INTERVALO</span></th>
 							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:95px;height:30px"><span class="label label-info" style="font-weight: normal;width:80px"><i class="icon-arrow-up"></i>  RETORNO</span></th>
 							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:95px;height:30px"><span class="label label-important" style="font-weight: normal;width:80px"><i class="icon-arrow-down"></i>  SAIDA</span></th>
-							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:100px;height:30px"><span class="label label-warning" style="font-weight: normal;width:80px"><i class="icon-arrow-up"></i>  EXTRA</span></th>
-							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:100px;height:30px"><span class="label" style="font-weight: normal;width:80px"><i class="icon-arrow-down"></i>  EXTRA</span></th>
+							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:100px;height:30px"><span class="label label-black" style="font-weight: normal;width:80px"><i class="icon-time"></i>  HORAS</span></th>
+							<th style="font-size:0.8em;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;width:100px;height:30px"><span class="label" style="font-weight: normal;width:80px"><i class="icon-plus"></i>  EXTRA</span></th>
 						</tr>
 					</thead>'
 			;
@@ -432,10 +612,11 @@
 				where records.data = '".$hoje."' AND records.user_id = ".$usuario->id." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"><span class=\'label label-info\'> '.$retorno[0]->hora.'</span></td>';}else{echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';}
 				if ($saida = $dao->get("Records", " left join reasons r on r.id=records.reason_id
 				where records.data = '".$hoje."' AND records.user_id = ".$usuario->id." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"><span class=\'label label-important\'> '.$saida[0]->hora.'</span></td>';}else{echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';}
-				if ($extraInicio = $dao->get("Records", " left join reasons r on r.id=records.reason_id
+				/*if ($extraInicio = $dao->get("Records", " left join reasons r on r.id=records.reason_id
 				where records.data = '".$hoje."' AND records.user_id = ".$usuario->id." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';}
 				if ($extraFim = $dao->get("Records", " left join reasons r on r.id=records.reason_id
-				where records.data = '".$hoje."' AND records.user_id = ".$usuario->id." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';}
+				where records.data = '".$hoje."' AND records.user_id = ".$usuario->id." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;"> --:--:--</td>';}*/
+				$this->calcularTotalJobResult($hoje, $usuario->id);
 				echo '</tr>';
 			}
 			echo"</tbody>";
