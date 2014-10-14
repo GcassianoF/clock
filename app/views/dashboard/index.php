@@ -57,7 +57,7 @@
 						<?HTML::span_START("12");?>
 							<div class="box">
 								<div class="box-header">
-									<span class="title">Permições Por Paginas</span>
+									<span class="title">Horas Por Mês</span>
 								</div>
 								<div class="box-content">
 									<?php if ($meses = $dao->Retrieve('Months', 'ORDER BY codigo ASC')):?>
@@ -65,7 +65,7 @@
 										$form->Start()?>
 										<div class="padded">
 											<div class="control-group">
-												<label class="control-label">Selecione um Perfil</label>
+												<label class="control-label">Selecione um Mês</label>
 												<div class="controls">
 													<?php $form->Select($meses, array('class'=>'chzn-select', 'style'=>'width: 100%;', 'name'=>'codigo','id'=>'codigo'), 'Month', 'codigo', 'descricao', @$_GET['codigo'], false)?>
 												</div>
