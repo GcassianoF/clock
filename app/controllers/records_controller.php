@@ -4,6 +4,9 @@
 
 		private $records = false;
 		public $show = false;
+		public $mais = "00:00:00";
+		public $menos = "00:00:00";
+		public $totalJobMes = "00:00:00";
 
 		public static function add()
 		{
@@ -225,6 +228,7 @@
 			$estiloSemana = "";
 			$estiloDia    = "";
 			$estiloDiaAtual    = "";
+			$totalMes = "00:00:00";
 
 			echo '<div align="center"><table class="responsive">
 			<thead>
@@ -278,10 +282,6 @@
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-info\'> '.$retorno[0]->hora.'</span></td>';}else{echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"> --:--:--</td>';}
 									if ($saida = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-important\'> '.$saida[0]->hora.'</span></td>';}else{echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"> --:--:--</td>';}
-									/*if ($extraInicio = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}
-									if ($extraFim = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="background-color: #b3f5a6;border:1px solid #827d7d"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}*/
 									$this->calcularTotalJob($ano."-".$mes."-".$dia);
 									echo '<td>&nbsp;&nbsp;&nbsp;</td>';
 								echo '</tr>';
@@ -302,11 +302,6 @@
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'RETORNO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"><span class=\'label label-info\'> '.$retorno[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"> --:--:--</td>';}
 									if ($saida = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
 									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'SAIDA' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"><span class=\'label label-important\'> '.$saida[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:1px solid #827d7d'.$this->fimDeSemana($dia,$mes,$ano).'"> --:--:--</td>';}
-									/*if ($extraInicio = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-INICIO' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:none"><span class=\'label label-warning\'> '.$extraInicio[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}*/
-									/*if ($extraFim = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
-									where records.data = '".$ano."-".$mes."-".$dia."' AND records.user_id = ".$_SESSION['user_id']." AND r.descricao = 'EXTRA-FIM' AND records.deleted_at IS NULL")) {echo '<td align="center" style="border:none"><span class=\'label\'> '.$extraFim[0]->hora.'</span></td>';}else{echo '<td align="center" style="border:none"> --:--:--</td>';}*/
-
 									$this->calcularTotalJob($ano."-".$mes."-".$dia);
 									echo '<td>&nbsp;&nbsp;&nbsp;</td>';
 								echo '</tr>';
@@ -318,6 +313,30 @@
 					}
 				}
 			}
+			echo '<tr>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td align="center" style="font-weight:bold">Mês</td>';
+				echo '<td align="center" style="font-weight:bold">Extra</td>';
+			echo '</tr>';
+			echo '<tr>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td align="center" style="font-weight:bold">'.$this->totalJobMes.'</td>';
+				echo '<td align="center" style="font-weight:bold">'.$this->mais.'</td>';
+			echo '</tr>';
 			echo"</tbody>";
 			echo"</table>";
 			echo '<br/><div>
@@ -626,10 +645,14 @@
 				if ($var01 > $var02)
 				{
 					$dif = sub_time($total, '08:00:00');
+					$this->totalJobMes = sum_time("08:00:00", $this->totalJobMes);
+					$this->mais = sum_time($this->mais, $dif);
 					echo '<td align="center" style="border:none;font-weight:bold"> 08:00:00</td>';
 					echo '<td align="center" style="border:none;color:#468847;font-weight:bold"> + '.$dif.'</td>';
 				} else {
 					$dif = sub_time('08:00:00',$total);
+					$this->totalJobMes = sum_time($total, $this->totalJobMes);
+					$this->mais = sub_time($this->mais, $dif);
 					echo '<td align="center" style="border:none;font-weight:bold"> '.$total.'</td>';
 					echo '<td align="center" style="border:none;color:#B94A48;font-weight:bold"> - '.$dif.'</td>';
 				}
