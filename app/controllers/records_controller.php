@@ -98,6 +98,113 @@
 			return false;
 		}
 
+		public static function addRecords()
+		{
+			global $DATA;
+			global $MSG;
+
+			$dao = new DAO();
+			if($DATA['Record'])
+			{
+				$Reason = $dao->get("Reasons", $DATA['Record']['reason_id']);
+
+				$data = date("Y-m-d", strtotime($DATA['Record']['data']));
+				$dateCompare = date("d/m/Y", strtotime($DATA['Record']['data']));
+				$DATA['Record']['data'] = $data;
+				$dh = $data." ".$DATA['Record']['hora'];
+				$dateConv = strtotime($dh);
+				$dataHora = date('Y-m-d H:i:s', $dateConv);
+
+				$DATA['Record']['dataHora'] = $dataHora;
+
+
+				validates_presence_of('Record', 'hora', 'HORA');
+				validates_presence_of('Record', 'data', 'DATA');
+				validates_presence_of('Record', 'justificativa', 'JUSTIFICATIVA');
+				validates_presence_of('Record', 'user_id', 'USUARIO');
+
+
+				if(check_errors())
+				{
+					return false;
+				}
+
+				if ($validade = $dao->get("Records", " WHERE data = '".$DATA['Record']['data']."'  AND records.reason_id = ".$DATA['Record']['reason_id']." AND records.user_id = ".$DATA['Record']['user_id']))
+				{
+					$MSG->info[] = "Atenção! O usuario já possui registro  de ".$Reason->descricao." para a data informada ".$dateCompare;
+					return false;
+				}else{
+					if ($DATA['Record']['reason_id'] == 2)
+					{
+						if ($entrada = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = '".$DATA['Record']['data']."' AND records.reason_id = 1 AND records.user_id = ".$DATA['Record']['user_id']))
+						{
+							$horaAnterior 	= $entrada[0]->hora;
+							$horaAtual 		= $DATA['Record']['hora'];
+
+							$varCac01 = strtotime($horaAnterior);
+							$varCac02 = strtotime($horaAtual);
+							if ($varCac01 > $varCac02)
+							{
+								$MSG->info[] = "A hora de \"".$Reason->descricao."\" não pode ser menor que a horar de \"ENTRADA\". ";
+								return false;
+							}
+						} else {
+							$MSG->info[] = "O Usuario não possui registro  de \"ENTRADA\" para a data informada \"".$dateCompare."\", Registre primeiro a \"ENTRADA\" para poder registrar \"".$Reason->descricao."\"";
+							return false;
+						}
+					} elseif ($DATA['Record']['reason_id'] == 3)
+					{
+						if ($intervalo = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = '".$DATA['Record']['data']."' AND records.reason_id = 2 AND records.user_id = ".$DATA['Record']['user_id']))
+						{
+							$horaAnterior 	= $entrada[0]->hora;
+							$horaAtual 		= $DATA['Record']['hora'];
+
+							$varCac01 = strtotime($horaAnterior);
+							$varCac02 = strtotime($horaAtual);
+							if ($varCac01 > $varCac02)
+							{
+								$MSG->info[] = "A hora de \"".$Reason->descricao."\" não pode ser menor que a horar de \"INTERVALO\". ";
+								return false;
+							}
+						} else {
+							$MSG->info[] = "O Usuario não possui registro  de \"INTERVALO\" para a data informada \"".$dateCompare."\", Registre primeiro a \"INTERVALO\" para poder registrar  \"".$Reason->descricao."\"";
+							return false;
+						}
+					} elseif ($DATA['Record']['reason_id'] == 4)
+					{
+						if ($retorno = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE data = '".$DATA['Record']['data']."' AND records.reason_id = 3 AND records.user_id = ".$DATA['Record']['user_id']))
+						{
+							$horaAnterior 	= $entrada[0]->hora;
+							$horaAtual 		= $DATA['Record']['hora'];
+
+							$varCac01 = strtotime($horaAnterior);
+							$varCac02 = strtotime($horaAtual);
+							if ($varCac01 > $varCac02)
+							{
+								$MSG->info[] = "A hora de \"".$Reason->descricao."\" não pode ser menor que a horar de \"RETORNO\". ";
+								return false;
+							}
+						} else {
+							$MSG->info[] = "O Usuario não possui registro  de \"RETORNO\" para a data informada \"".$dateCompare."\", Registre primeiro a \"RETORNO\" para poder registrar  \"".$Reason->descricao."\"";
+							return false;
+						}
+					}
+
+					$record = new Record($DATA['Record']);
+
+					if($dao->Create($record))
+					{
+						$MSG->success[] = "Cadastro efetuado!";
+						$_POST = array();
+					}else
+					{
+						$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
+					}
+				}
+			}
+			return false;
+		}
+
 		public function update($record)
 		{
 			global $DATA;
@@ -221,6 +328,7 @@
 
 		public function impr_calendar( $mes='', $ano='')
 		{
+			/*send_email($destinatario="gcassianof@gmail", $menssagem="teste", $titulo="teste");*/
 			$dao  = new DAO();
 			$mes = !$mes ? date('m') : $mes;
 			$ano = !$ano ? date('Y') : $ano;
@@ -230,7 +338,7 @@
 			$estiloDiaAtual    = "";
 			$totalMes = "00:00:00";
 
-			echo '<div align="center"><table class="responsive">
+			echo '<div align="center"><table class="responsive" style="border-collapse: collapse;">
 			<thead>
 				<tr >
 					<th style="font-size:0.8em;width:30px;height:30px"></th>
@@ -271,7 +379,7 @@
 								$diaExtenso = $this->nameDiaAtual($dia,$mes,$ano,FALSE);
 								echo '<tr style="">';
 									echo '<td align="center" ><i class="icon-play"></i></td>';
-									echo '<td align="center" style="background-color: #b3f5a6;">'.$diaExtenso.'</td>';
+									echo '<td align="right" style="background-color: #b3f5a6;font-weight:bold">'.$diaExtenso.'</td>';
 									echo '<td align="center" style="background-color: #b3f5a6;">-</td>';
 									echo '<td align="center" style="background-color: #b3f5a6;">'. $dia. '</td>';
 									if ($entrada = $dao->get("Records", " inner join reasons r on r.id=records.reason_id
@@ -333,7 +441,7 @@
 				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
 				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
 				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
-				echo '<td>&nbsp;&nbsp;&nbsp;</td>';
+				echo '<td id="totalVal"></td>';
 				echo '<td align="center" style="font-weight:bold">'.$this->totalJobMes.'</td>';
 				echo '<td align="center" style="font-weight:bold">'.$this->mais.'</td>';
 			echo '</tr>';
@@ -647,14 +755,14 @@
 					$dif = sub_time($total, '08:00:00');
 					$this->totalJobMes = sum_time("08:00:00", $this->totalJobMes);
 					$this->mais = sum_time($this->mais, $dif);
-					echo '<td align="center" style="border:none;font-weight:bold"> 08:00:00</td>';
-					echo '<td align="center" style="border:none;color:#468847;font-weight:bold"> + '.$dif.'</td>';
+					echo '<td align="center"  style="border:none;font-weight:bold"> 08:00:00</td>';
+					echo '<td align="center" id="valHora" style="border:none;color:#468847;font-weight:bold"> + '.$dif.'</td>';
 				} else {
 					$dif = sub_time('08:00:00',$total);
 					$this->totalJobMes = sum_time($total, $this->totalJobMes);
 					$this->mais = sub_time($this->mais, $dif);
 					echo '<td align="center" style="border:none;font-weight:bold"> '.$total.'</td>';
-					echo '<td align="center" style="border:none;color:#B94A48;font-weight:bold"> - '.$dif.'</td>';
+					echo '<td align="center" id="valHora" style="border:none;color:#B94A48;font-weight:bold"> - '.$dif.'</td>';
 				}
 
 				//echo '<td align="center" style="border:none"> '.$total.'</td>';

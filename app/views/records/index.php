@@ -140,5 +140,20 @@
 				effect			: 	'slide'
 			});
 		</script>
+<!-- 		<script>
+		$('#valHora').click(function(){
+	total = 0;
+	$(this).each(function(){
+		this.checked?total+=$(this).val():null;
+	});
+	$('#totalVal').val(total);
+});
+		</script> -->
+<!-- 				<script>
+				$(document).ready(function(){
+	total = $(this).val();
+	$('#totalVal').val(total);
+		});
+		</script> -->
 	</body>
 </html>

@@ -26,6 +26,7 @@ define('WEBROOT', WWWROOT."/webroot");
 define('APP', "app");
 define('APPROOT', DOCROOT.DS.APP);
 define('ACTION', '');// deprecated
+define('UPLOADFILES', DOCROOT."/core/uploadfiles/");
 
 // define the configuration receive email (IMAP / POP)
 // IMAP

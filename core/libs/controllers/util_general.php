@@ -146,7 +146,7 @@
 	}
 
 	// generates a really good and unique token
-	function uuid() {   
+	function uuid() {
 
 	     // Generate 128 bit random sequence
 	     $randmax_bits = strlen(base_convert(mt_getrandmax(), 10, 2));  // how many bits is mt_getrandmax()
@@ -163,7 +163,7 @@
 	     $a['time_hi_and_version'] = substr($x, 48, 16);
 	     $a['clock_seq'] = substr($x, 64, 16);
 	     $a['node_part'] =  substr($x, 80, 48);
-	    
+
 	     // Apply bit masks for "random or pseudo-random" version per RFC
 	     $a['time_hi_and_version'] = substr_replace($a['time_hi_and_version'], '0100', 0, 4);
 	     $a['clock_seq'] = substr_replace($a['clock_seq'], '10', 0, 2);
@@ -316,7 +316,7 @@
 	function auth($op=FALSE, $redirect_to="")
 	{
 		global $MSG;
-		
+
 		$r = TRUE;
 		switch ($op)
 		{
@@ -335,7 +335,7 @@
 			default:// both
 				break;
 		}
-		if ($_SESSION) 
+		if ($_SESSION)
 		{
 			// checks for permissions
 			permission();
@@ -355,12 +355,12 @@
 	    $active = str_replace($query_string, '', $request_uri);
 	    $active = str_replace(DIR, '', $active);
 	    //var_dump($active);
-	    if (in_array($active, $exclude)) 
+	    if (in_array($active, $exclude))
 	    {
 	    	return false;
 	    }
 	    $dao = new DAO();
-	    if (!$page = $dao->Retrieve('Navigation_page', "WHERE url = '$active'", true, true)) 
+	    if (!$page = $dao->Retrieve('Navigation_page', "WHERE url = '$active'", true, true))
 	    {
 	    	return false;// uso like para permitir passagem de parâmetros
 	    }
@@ -373,16 +373,16 @@
 	}
 
 	// criar passwords aleatoriamente com letras e numeros e retorna em UPPERCASE
-	function random_pass($length=10) 
+	function random_pass($length=10)
 	{
 		$alphabets = range('A','Z');
 		$numbers = range('0','9');
 		$additional_characters = array('_','.');
 		$final_array = array_merge($alphabets,$numbers);
-		 
+
 		$password = '';
 
-		while($length--) 
+		while($length--)
 		{
 			$key = array_rand($final_array);
 			$password .= $final_array[$key];
@@ -430,10 +430,10 @@
 	{
 		if(file_exists($dir))
 	    {
-	    	$dh =  opendir($dir);									        	
+	    	$dh =  opendir($dir);
 	    	$arquivos = array();
-			
-	    	while (false !== ($filename = readdir($dh))) 
+
+	    	while (false !== ($filename = readdir($dh)))
 	        {
 	    		if($filename != "." && $filename != "..")
 	            {
@@ -451,7 +451,7 @@
 			if(is_array($arquivos)){
 		    	sort($arquivos);
 	    	}
-			
+
 	    	return $arquivos;
 		}
 		else{
@@ -504,20 +504,20 @@
 	function validaCPF($cpf)
 	{	// Verifiva se o número digitado contém todos os digitos
 	    $cpf = str_pad(ereg_replace('[^0-9]', '', $cpf), 11, '0', STR_PAD_LEFT);
-		
+
 		// Verifica se nenhuma das sequências abaixo foi digitada, caso seja, retorna falso
-	    if 
+	    if
 		    (
-		    	strlen($cpf) != 11 
-		    	|| $cpf == '00000000000' 
-		    	|| $cpf == '11111111111' 
-		    	|| $cpf == '22222222222' 
-		    	|| $cpf == '33333333333' 
-		    	|| $cpf == '44444444444' 
-		    	|| $cpf == '55555555555' 
-		    	|| $cpf == '66666666666' 
-		    	|| $cpf == '77777777777' 
-		    	|| $cpf == '88888888888' 
+		    	strlen($cpf) != 11
+		    	|| $cpf == '00000000000'
+		    	|| $cpf == '11111111111'
+		    	|| $cpf == '22222222222'
+		    	|| $cpf == '33333333333'
+		    	|| $cpf == '44444444444'
+		    	|| $cpf == '55555555555'
+		    	|| $cpf == '66666666666'
+		    	|| $cpf == '77777777777'
+		    	|| $cpf == '88888888888'
 		    	|| $cpf == '99999999999'
 		    )
 		{
@@ -542,46 +542,46 @@
 	}
 
 	// Função que valida o CNPJ
-	function validaCNPJ($cnpj) 
-	{ 
+	function validaCNPJ($cnpj)
+	{
 	    $cnpj = str_pad(ereg_replace('[^0-9]', '', $cpf), 14, '0', STR_PAD_LEFT);
 
 	    if (strlen($cnpj) != 14)
 	    {
-	    	return false; 
+	    	return false;
 	    }else
 	    {
-		    $soma1 = ($cnpj[0] * 5) + 
-		    ($cnpj[1] * 4) + 
-		    ($cnpj[3] * 3) + 
-		    ($cnpj[4] * 2) + 
-		    ($cnpj[5] * 9) + 
-		    ($cnpj[7] * 8) + 
-		    ($cnpj[8] * 7) + 
-		    ($cnpj[9] * 6) + 
-		    ($cnpj[11] * 5) + 
-		    ($cnpj[12] * 4) + 
-		    ($cnpj[13] * 3) + 
-		    ($cnpj[14] * 2); 
-		    $resto = $soma1 % 11; 
-		    $digito1 = $resto < 2 ? 0 : 11 - $resto; 
-		    $soma2 = ($cnpj[0] * 6) + 
-		 
-		    ($cnpj[1] * 5) + 
-		    ($cnpj[3] * 4) + 
-		    ($cnpj[4] * 3) + 
-		    ($cnpj[5] * 2) + 
-		    ($cnpj[7] * 9) + 
-		    ($cnpj[8] * 8) + 
-		    ($cnpj[9] * 7) + 
-		    ($cnpj[11] * 6) + 
-		    ($cnpj[12] * 5) + 
-		    ($cnpj[13] * 4) + 
-		    ($cnpj[14] * 3) + 
-		    ($cnpj[16] * 2); 
-		    $resto = $soma2 % 11; 
-		    $digito2 = $resto < 2 ? 0 : 11 - $resto; 
-		    
+		    $soma1 = ($cnpj[0] * 5) +
+		    ($cnpj[1] * 4) +
+		    ($cnpj[3] * 3) +
+		    ($cnpj[4] * 2) +
+		    ($cnpj[5] * 9) +
+		    ($cnpj[7] * 8) +
+		    ($cnpj[8] * 7) +
+		    ($cnpj[9] * 6) +
+		    ($cnpj[11] * 5) +
+		    ($cnpj[12] * 4) +
+		    ($cnpj[13] * 3) +
+		    ($cnpj[14] * 2);
+		    $resto = $soma1 % 11;
+		    $digito1 = $resto < 2 ? 0 : 11 - $resto;
+		    $soma2 = ($cnpj[0] * 6) +
+
+		    ($cnpj[1] * 5) +
+		    ($cnpj[3] * 4) +
+		    ($cnpj[4] * 3) +
+		    ($cnpj[5] * 2) +
+		    ($cnpj[7] * 9) +
+		    ($cnpj[8] * 8) +
+		    ($cnpj[9] * 7) +
+		    ($cnpj[11] * 6) +
+		    ($cnpj[12] * 5) +
+		    ($cnpj[13] * 4) +
+		    ($cnpj[14] * 3) +
+		    ($cnpj[16] * 2);
+		    $resto = $soma2 % 11;
+		    $digito2 = $resto < 2 ? 0 : 11 - $resto;
+
 		    return (($cnpj[16] == $digito1) && ($cnpj[17] == $digito2));
 		    //return true;
 		}
@@ -637,7 +637,7 @@
             $filds[$row['COLUMN_NAME']] = $row['DATA_TYPE'];
         }
         $i = '(';
-    	foreach ($filds as $key => $value) 
+    	foreach ($filds as $key => $value)
         {
         	$i .= $key.' / ';
         }
@@ -648,12 +648,12 @@
 
 	function sobreNome($nome)
 	{
-		if ($nome != '') 
+		if ($nome != '')
 		{
 			$array=explode(" ",$nome);
-			if ($array[1]) 
+			if ($array[1])
 			{
-				echo $array[1];	
+				echo $array[1];
 			}
 			else
 			{
@@ -663,6 +663,83 @@
 		else
 		{
 			echo " ";
+		}
+	}
+
+	function upload_files($var)
+	{
+		global $MSG;
+		$dao = new DAO();
+
+		if ($var) {
+			$arquivo = $var;
+			$target_dir =UPLOADFILES.'/'.basename($arquivo["name"]);
+
+			$uploadOk=1;
+
+			if (basename($arquivo["name"] == '')) {
+				$MSG->alert[] = 'Arquivo esta vazio.';
+				$uploadOk = 0;
+				return false;
+			} else {
+				$uploadOk = 1;
+			}
+
+
+			// Check if file already exists
+			if (file_exists($target_dir)) {
+				echo 'Atenção!, o arquivo "'.basename($arquivo["name"]).'" já existe. ';
+				$MSG->alert[] = 'Atenção!, o arquivo "'.basename($arquivo["name"]).'" já existe.';
+				$uploadOk = 0;
+				return false;
+			}else{
+				$uploadOk = 1;
+			}
+
+			// Check file size
+			if ($arquivo['size'] > 3000000) {
+				$MSG->alert[] = 'Atenção!: Arquivo muito grande. Tamanho máximo permitido 3000kb. O arquivo enviado contém '.round($arquivo['size']/1024).'kb. ';
+				$uploadOk = 0;
+				return false;
+			}else{
+				$uploadOk = 1;
+			}
+
+			/*// Only GIF files allowed
+			if (!($uploadFile_type == "image/jpg")) {
+			echo "Sorry, only GIF files are allowed.";
+			$uploadOk = 0;
+			}*/
+
+			if ($uploadOk==0) {
+				$MSG->error[] = "Atenção!: Não e possivel efetuar upload do arquivo.";
+				return false;
+			} else {
+				if (move_uploaded_file($arquivo["tmp_name"], $target_dir)) {
+					chmod ($target_dir, 0777);
+					$MSG->success[] = "Sucesso!: Arquivo ". basename($arquivo["name"]). " foi carregado.";
+					$DATA['File']['name'] 	= $arquivo["name"];
+					$DATA['File']['size'] 		= $arquivo["size"];
+					$DATA['File']['type'] 	= $arquivo["type"];
+					$DATA['File']['path'] 	= "/".$arquivo["name"];
+					$file = new File($DATA['File']);
+
+					if($dao->Create($file))
+					{
+						$MSG->alert[] = "Arquivo ".$arquivo["name"]." anexado com sucesso.";
+						return $file;
+					}else{
+						$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
+						return false;
+					}
+				} else {
+					$MSG->error[] = "Erro!: houve um erro ao enviar seu arquivo.";
+					return false;
+				}
+			}
+		} else {
+			$MSG->error[] = "Atenção!: Não e possivel ser vazio.";
+			return false;
 		}
 	}
 ?>
