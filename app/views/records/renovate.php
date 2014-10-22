@@ -9,7 +9,7 @@
       $records_controller->addRecords();
       $Users = $dao->Retrieve("Users", "ORDER BY nome");
       array_unshift($Users, "");
-      $Reasons = $dao->Retrieve("Reasons", "ORDER BY id");
+      $Reasons = $dao->Retrieve("Reasons", "WHERE reasons.deleted_at IS NULL ORDER BY id");
     ?>
     <!-- <script type="text/javascript">
     $(document).ready(function(){
