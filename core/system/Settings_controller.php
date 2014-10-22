@@ -34,7 +34,7 @@ class Settings_Controller extends App_Controller
 		global $DATA;
 		global $MSG;
 
-		if ($DATA['Menu']) 
+		if ($DATA['Menu'])
 		{
 			validates_presence_of('Menu', 'nome', 'NOME');
 			validates_presence_of('Menu', 'icone', 'ICONE');
@@ -240,7 +240,7 @@ class Settings_Controller extends App_Controller
 	{
 		$dao = new DAO();
 		if ($menus = $dao->Retrieve('Navigation_menus', ' WHERE navigation_menus.deleted_at IS NULL ORDER BY posicao DESC'))
-		{	
+		{
 			echo '<div id="dataTables">
 				<table cellpadding="0" cellspacing="0" border="0"  class="dTable responsive">';
 			echo '<div id="breadcrumbs">
@@ -267,7 +267,7 @@ class Settings_Controller extends App_Controller
 					<tr>
 						<td>'.$menu->nome.'</td>
 						<td><i class="'.$menu->icone.'"> ' .$menu->icone.'</i></td>
-						<td style="text-align:center"><span class="label label-red">'.$menu->posicao.'</span></td>
+						<td style="text-align:center"><span class="label label-green">'.$menu->posicao.'</span></td>
 						<td style="text-align:center">
 							<a class="btn btn-mini btn-gray" href="'.WWWROOT.'/settings/updateMenus/'.$menu->id.'"><i class="icon-edit"></i></a>
 							<a class="btn btn-mini btn-red" href="'.WWWROOT.'/settings/deleteMenus/'.$menu->id.'"><i class="icon-trash"></i></a>
@@ -276,7 +276,7 @@ class Settings_Controller extends App_Controller
 				;
 			}
 			echo '
-						
+
 					</tbody>
 				</table></div>';
 		}else{

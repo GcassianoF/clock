@@ -24,11 +24,11 @@
                                     <a href="<?=WWWROOT?>/dashboard"><i class="icon-dashboard icon-2x"></i><span>Dashboard</span></a>
                         </li>
             <?else:?>
-                                    
+
             <?endif?>
-	  <li class="active dark-nav">
+	 <!--  <li class="active dark-nav">
                 <span class="glow"></span>
-                <a href="<?=WWWROOT.'/records/'?>"><i class="icon-time icon-2x"></i><span>Registrar Hora</span></a>
+                <a href="<?=WWWROOT.'/records/'?>"><i class="icon-time icon-2x"></i><span>Registrar Hora</span></a> -->
             </li>
                 <?php
                     $sql = "SELECT  NM.id AS menu_id, NM.nome AS menu_name, NM.icone AS icon_m, NP.icone AS icon_p, NP.nome AS page_name, NP.url AS url

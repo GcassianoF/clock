@@ -12,9 +12,11 @@
 <link href="<?=WEBROOT?>/stylesheets/resume.css" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/stylesheets/resume-control.css" rel="stylesheet" type="text/css" />
 <link href="<?=WEBROOT?>/plugins/flipcountdown/jquery.flipcountdown.css" rel="stylesheet" type="text/css"  />
+<link href="<?=WEBROOT?>/plugins/timepicker.css" rel="stylesheet" type="text/css"  />
 <script src="<?=WEBROOT?>/javascripts/application.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/plugins/toastmessage/src/main/javascript/jquery.toastmessage.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/plugins/vTicker/vTicker.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/plugins/BreakingNewsTicker/js/BreakingNews.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/javascripts/jquery.toast.min.js" type="text/javascript"></script>
 <script src="<?=WEBROOT?>/plugins/flipcountdown/jquery.flipcountdown.js" type="text/javascript"></script>
+<script src="<?=WEBROOT?>/plugins/timepicker.js" type="text/javascript"></script>
