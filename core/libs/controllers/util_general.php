@@ -671,7 +671,7 @@
 		global $MSG;
 		$dao = new DAO();
 
-		if ($var) {
+		if (isset($var)) {
 			$arquivo = $var;
 			$target_dir =UPLOADFILES.'/'.basename($arquivo["name"]);
 

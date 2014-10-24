@@ -22,100 +22,84 @@
 					// se houver um usuário no banco de dados com essas credenciais inicia-se a sessão
 					if ($user = $dao->Retrieve('Users', $data, true, true))
 					{
-						$dateTime = date("Y-m-d H:i:s");
+						/*$dateTime = date("Y-m-d H:i:s");
 						$dateVar = date("d/m/Y");
 						$var = explode(" ",$dateTime,2);
 						$date = $var[0];
 						$time = $var[1];
-						$Users = $dao->get("Users", $_SESSION['user_id']);
+						$Users = $dao->get("Users", $_SESSION['user_id']);*/
 
-						if ($validate = $dao->get("Licenses", "INNER JOIN reasons r ON r.id = licenses.reason_id WHERE data = CURRENT_DATE AND licenses.reason_id = ".$DATA['License']['reason_id']." AND licenses.user_id = ".$_SESSION['user_id'])) {
-							if ($DATA['License']['reason_id'] == 1) {
-								$MSG->info[] = "Atenção! voçê já registro a entrada para este resgistro na data de hoje ".$dateVar.", falta registra a SAIDA";
-							} else {
-								$MSG->info[] = "Atenção! voçê ainda não registro a entrada para este resgistro na data de hoje ".$dateVar.", falta registra a ENTRADA";
-							}
-						}else
+						$DATA['License']['user_id'] = $_SESSION['user_id'];
+
+						if ($DATA['License']['atestado'] == 1) {
+							$DATA['License']['atestado'] = true;
+						} else {
+							$DATA['License']['atestado'] = false;
+						}
+
+						validates_presence_of('License', 'justificativa', 'JUSTIFICATIVA');
+						validates_presence_of('License', 'data', 'DATA');
+						validates_presence_of('License', 'inicio', 'INICIO');
+						validates_presence_of('License', 'fim', 'FIM');
+
+						if(check_errors())
 						{
-							$DATA['License']['user_id'] 	 	= $_SESSION['user_id'];
-							$DATA['License']['dataHora'] 	= $DATA['License']['data']." ".$DATA['License']['hora'];
+							return false;
+						}
 
-							if ($DATA['License']['atestado'] == 1) {
-								$DATA['License']['atestado'] = true;
-							} else {
-								validates_presence_of('License', 'file_id', 'Anexo');
-								$DATA['License']['atestado'] = false;
-							}
+						$DATA['License']['data'] = date("Y-m-d", strtotime($DATA['License']['data']));
+						$inicio = new DateTime($DATA['License']['inicio']);
+						$fim = new DateTime($DATA['License']['fim']);
 
-							validates_presence_of('License', 'justificativa', 'JUSTIFICATIVA');
-							validates_presence_of('License', 'data', 'DATA');
-							validates_presence_of('License', 'hora', 'HORA');
+						if ($inicio->diff($fim)->format('%R') == '-' || $inicio->diff($fim)->format('%R') == '') {
+							$MSG->error[] = "O campo FIM não pode ser maior que INICIO";
+							return false;
+						}
 
-							// valida as funções acima caso de erro retorna p/ o usuario
-							if(check_errors())
-							{
-								return false;
-							}
+						if ($inicio === $fim) {
+							$MSG->error[] = "O campo FIM não pode ser iqual ao INICIO";
+							return false;
+						}
 
-							if (!$DATA['License']['atestado']) {
-								if ($_FILES["uploadFile"]) {
-									if($fileSave = upload_files($_FILES["uploadFile"]))
-									{
-										$name 	= basename($_FILES["uploadFile"]["name"]);
-										$size 	= basename($_FILES["uploadFile"]["size"]);
-										$type 	= basename($_FILES["uploadFile"]["type"]);
-										$path 	= basename($_FILES["uploadFile"]["path"]);
+						if (!$DATA['License']['atestado']) {
+							if (isset($_FILES["uploadFile"])) {
+								if($fileSave = upload_files($_FILES["uploadFile"]))
+								{
+									$name 	= basename($_FILES["uploadFile"]["name"]);
+									$size 	= basename($_FILES["uploadFile"]["size"]);
+									$type 	= basename($_FILES["uploadFile"]["type"]);
+									$path 	= basename($_FILES["uploadFile"]["path"]);
 
-										if ($registroArq = $dao->get("Files", "WHERE files.name like '%".$name."%' AND files.size = ".$size." AND files.type LIKE '%".$type."%' AND files.path LIKE '%".$path."%'")) {
-											$DATA['License']['file_id'] = $registroArq[0]->id;
-										} else {
-											$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
-											return false;
-										}
+									if ($registroArq = $dao->get("Files", "WHERE files.name like '%".$name."%' AND files.size = ".$size." AND files.type LIKE '%".$type."%' AND files.path LIKE '%".$path."%'")) {
+										$DATA['License']['file_id'] = $registroArq[0]->id;
 									} else {
 										$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
+										//$MSG->error[] = "1";
 										return false;
 									}
-								}else{
-									$MSG->error[] = "Selecione um arquivo";
+								} else {
+									$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
+									//$MSG->error[] = "2";
 									return false;
 								}
-							} else {
-								if ($_FILES["uploadFile"]) {
-									if($fileSave = upload_files($_FILES["uploadFile"]))
-									{
-										$name 	= basename($_FILES["uploadFile"]["name"]);
-										$size 	= basename($_FILES["uploadFile"]["size"]);
-										$type 	= basename($_FILES["uploadFile"]["type"]);
-										$path 	= basename($_FILES["uploadFile"]["path"]);
-
-										if ($registroArq = $dao->get("Files", "WHERE files.name like '%".$name."%' AND files.size = ".$size." AND files.type LIKE '%".$type."%' AND files.path LIKE '%".$path."%'")) {
-											$DATA['License']['file_id'] = $registroArq[0]->id;
-										} else {
-											$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
-											return false;
-										}
-									} else {
-										$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
-										return false;
-									}
-								}
+							}else{
+								$MSG->error[] = "Selecione um arquivo";
+								return false;
 							}
+						}
 
-							// caso não haja error o objeto DAO e instanciado
-							$dao = new DAO();
+						$dao = new DAO();
 
-							// instacia o objeto da Class principal
-							$license = new License($DATA['License']);
+						$license = new License($DATA['License']);
 
-							if($dao->Create($license))
-							{
-								$MSG->success[] = "Cadastro efetuado!";
-								$_POST = array();
-							}else
-							{
-								$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
-							}
+						if($dao->Create($license))
+						{
+							$MSG->success[] = "Cadastro efetuado!";
+							$_POST = array();
+						}else
+						{
+							$MSG->error[] = "Erro no Cadastro. Entre em contato com o Administrador do Sistema!";
+							//$MSG->error[] = "5";
 						}
 					}else
 					{
@@ -188,5 +172,39 @@
 			}
 			return parent::paginate($this->licenses, $page, $limit);
 		}
+
+		public function download($arquivo=null)
+		{
+			global $MSG;
+
+			if ($arquivo != null) {
+				$dao  = new DAO();
+
+				if ($content = $dao->Retrieve('Licenses', $arquivo, true, true)) {
+					$target_dir = UPLOADFILES.'/'.basename($content->name);
+
+					if (!file_exists($target_dir)) {
+						$MSG->error[] = "Arquivo não existente no repositorio de documentos";
+						return false;
+					}
+
+					header('Content-Description: File Transfer');
+					header('Content-Disposition: attachment; filename="'.$content->name.'"');
+					header('Content-Type: application/octet-stream');
+					header('Content-Transfer-Encoding: binary');
+					header('Content-Length: ' . filesize($content->name));
+					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+					header('Pragma: public');
+					header('Expires: 0');
+
+					readfile($target_dir);
+				} else {
+					$MSG->error[] = "Arquivo inexistente";
+				}
+			} else {
+				$MSG->error[] = "Selecione um arquivo valido";
+			}
+		}
+
 	}
 ?>

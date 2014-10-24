@@ -3,11 +3,10 @@
 	{
 		public $id;
 		public $user_id;
-		public $reason_id;
 		public $file_id;
 		public $data;
-		public $hora;
-		public $dataHora;
+		public $inicio;
+		public $fim;
 		public $justificativa;
 		public $atestado;
 		public $created_at;
