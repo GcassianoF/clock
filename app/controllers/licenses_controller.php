@@ -52,11 +52,11 @@
 						$fim = new DateTime($DATA['License']['fim']);
 
 						if ($inicio->diff($fim)->format('%R') == '-' || $inicio->diff($fim)->format('%R') == '') {
-							$MSG->error[] = "O campo FIM não pode ser maior que INICIO";
+							$MSG->error[] = "O campo FIM não pode ser menor que INICIO";
 							return false;
 						}
 
-						if ($inicio === $fim) {
+						if ($inicio == $fim) {
 							$MSG->error[] = "O campo FIM não pode ser iqual ao INICIO";
 							return false;
 						}

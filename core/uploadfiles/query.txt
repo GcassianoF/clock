@@ -1,0 +1,39 @@
+CREATE TABLE [RegistrosLote](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[lote_id] [int] NOT NULL,
+	[processoAdministrativo_id] [int] NOT NULL,
+	[numeroSolicitacaoTJ] [varchar](25) NOT NULL,
+	[tipoAcao] [varchar](7) NOT NULL,
+	[dataEmissaoTJ] [datetime] NOT NULL,
+	[numeroProcesso] [varchar](100) NOT NULL,
+	[codUnidade] [varchar](100) NULL,
+	[numeroReferencia] [varchar](50) NULL,
+	[tipoBeneficiario] [varchar](50) NULL,
+	[nomeBeneficiario] [varchar](100) NULL,
+	[cpfcnpjBeneficiario] [varchar](20) NULL,
+	[nomeProcurador] [varchar](100) NULL,
+	[cpfcnpjProcurador] [varchar](20) NULL,
+	[tipoProcurador] [varchar](100) NULL,
+	[nomeRepresente] [varchar](100) NULL,
+	[cpfcnpjRepresentante] [varchar](100) NULL,
+	[tipoRepresentante] [varchar](100) NULL,
+	[tipoFinalidade] [varchar](100) NULL,
+	[baseCalculo] [varchar](100) NULL,
+	[valorReal] [decimal](18, 2) NULL,
+	[qualificador] [varchar](100) NULL,
+ CONSTRAINT [PK_dbo.RegistrosLote] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [RegistrosLote]  WITH NOCHECK ADD  CONSTRAINT [FK_RegistrosLote_Lote] FOREIGN KEY([lote_id])
+REFERENCES [Lote] ([id])
+GO
+
+ALTER TABLE [RegistrosLote] CHECK CONSTRAINT [FK_RegistrosLote_Lote]
+GO
+
+

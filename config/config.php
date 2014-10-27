@@ -43,9 +43,9 @@ define('POPCONTA', "gmail.com");
 
 // database config
 define('HOST', 'localhost');
-define('DATABASE', 'clock');
+define('DATABASE', 'clock_indra');
 define('USERNAME', 'root');
-define('PASSWORD', '@indra123');
+define('PASSWORD', 'admin');
 
 // include stuff
 $helpers_dir     	= DOCROOT."/core/helpers/";

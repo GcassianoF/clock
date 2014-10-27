@@ -7,7 +7,7 @@
 			auth("yes");
 			$licenses_controller = new Licenses_Controller();
 			$licenses_controller->add();
-			$Files = $dao->Retrieve("Files", "ORDER BY id");
+			$Files = $dao->Retrieve("Files");
 		?>
 		<!-- <script type="text/javascript">
 		$(document).ready(function(){
@@ -138,12 +138,12 @@
 																	<td  class="center"><?=$licenses->inicio?></td>
 																	<td  class="center"><?=$licenses->fim?></td>
 																	<td  class="center"><?=$licenses->justificativa?></td>
-																	<td  class="center"><?=$licenses->atestado = $licenses->atestado == 1 ? '<span class="label label-red">NÃO</span>' : '<span class="label label-green">SIM</span>'?></td>
+																	<td  class="center"><?=$licenses->atestado = $licenses->atestado == 1 ? '<span class="label label-red" style="width:30px">NÃO</span>' : '<span class="label label-green"  style="width:30px">SIM</span>'?></td>
 																	<td  class="center">
 																		<?if ($licenses->file_id != ''):?>
-																			<a target="_blank" href="<?=WWWROOT.'/core/uploadfiles/'.$licenses->rel['file']->name?>" class="btn btn-mini btn-gray tip" title="Donwload"><i class="icon-download-alt icon-white"></i> Donwload&nbsp;</a>
+																			<a style="width:90px" target="_blank" href="<?=WWWROOT.'/core/uploadfiles/'.$licenses->rel['file']->name?>" class="btn btn-mini btn-gray tip" title="Donwload"><i class="icon-download-alt icon-white"></i> Donwload&nbsp;</a>
 																		<?else:?>
-																			<a class="btn btn-mini btn-black tip" title="Sem Anexo"><i class="icon-ban-circle icon-white"></i> Sem Anexo</a>
+																			<a style="width:90px" class="btn btn-mini btn-black tip" title="Sem Anexo"><i class="icon-ban-circle icon-white"></i> Sem Anexo</a>
 																		<?endif?>
 																	</td>
 																</tr>

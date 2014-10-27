@@ -312,8 +312,17 @@
 	    header("location:$wwwroot/$addr");
 	}
 
+	function redirect_to_for_permission($addr="", $txt="")
+	{
+	    global $MSG;
+	    $wwwroot = WWWROOT;
+	    $MSG->alert[] = $txt;
+	    //echo("<script>alert('giceu');</script>");
+	    header("location:$wwwroot/$addr");
+	}
+
 	// authenticates user depending on the case
-	function auth($op=FALSE, $redirect_to="")
+	function auth($op=FALSE, $redirect_to="", $txt=FALSE)
 	{
 		global $MSG;
 
@@ -323,14 +332,15 @@
 			case "yes":// logged in
 				if (!$_SESSION)
 				{
-	                redirect_to("session/login");
+	                		redirect_to("session/login");
 				}
 				break;
 			case "no":// logged out
 				if ($_SESSION)
 				{
-					redirect_to($redirect_to);
+					redirect_to_for_permission($redirect_to,"sem acesso!");
 				}
+				//return $MSG->alert[] = "Voçê não tem ";
 				break;
 			default:// both
 				break;
@@ -340,6 +350,7 @@
 			// checks for permissions
 			permission();
 		}
+		//$MSG->alert[] = "Voçê não tem ";
 		return $r;
 	}
 
@@ -733,7 +744,7 @@
 						return false;
 					}
 				} else {
-					$MSG->error[] = "Erro!: houve um erro ao enviar seu arquivo.";
+					$MSG->error[] = "houve um erro ao enviar seu arquivo.";
 					return false;
 				}
 			}
