@@ -66,6 +66,28 @@
 								}
 							}
 
+							if ($Reason->descricao === "RETORNO") {
+
+								if($RecordsNow = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE records.reason_id = 2 AND records.user_id = ".$_SESSION['user_id']))
+								{
+									$interv = sub_time($Itinenary->retorno, $Itinenary->intervalo);
+									$registInt = $RecordsNow[0]->hora;
+									$nowRet = $DATA['Record']['hora'];
+
+									$sumTot = sum_time($interv, $registInt);
+									$falta = sub_time($sumTot, $nowRet);
+
+									$varT = strtotime($sumTot);
+									$varS = strtotime($nowRet);
+									$rest = substr($interv, -7, 1);
+									if ($varS < $varT) {
+										$MSG->error[] = "Seu tempo de intervalo e de  ".$rest." hora(s)";
+										$MSG->alert[] = "Voçê ainda tem ".$falta." de intervalo";
+										return false;
+									}
+								}
+							}
+
 							// valida as funções acima caso de erro retorna p/ o usuario
 							if(check_errors())
 							{
