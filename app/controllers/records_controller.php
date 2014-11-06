@@ -44,7 +44,8 @@
 							$DATA['Record']['hora'] 	= $time;
 							$DATA['Record']['dataHora'] 	= $dateTime;
 
-							if ($Reason->descricao === "ENTRADA") {
+							if ($Reason->descricao === "ENTRADA")
+							{
 								$e = sum_time($Itinenary->entrada, "00:15:00");
 								$j  = strtotime($e);
 								$d = strtotime($time);
@@ -53,21 +54,24 @@
 								$jsub  = strtotime($sub);
 								$dsub = strtotime($time);
 
-								if ($d > $j) {
-									if ($DATA['Record']['justificativa'] == "") {
+								if ($d > $j)
+								{
+									if ($DATA['Record']['justificativa'] == "")
+									{
 										$MSG->error[] = "O campo Justificativa e obrigatorio";
 										$MSG->alert[] = "Seu horário de entrada é as ".$Itinenary->entrada." e você esta tentando efetuar um registro acima dos 15 minustos de tolerância sem justificativa.";
 										return false;
 									}
 								}
-								if ($dsub < $jsub) {
+								if ($dsub < $jsub)
+								{
 									$MSG->alert[] = "Seu horário de entrada é as ".$Itinenary->entrada." e você esta tentando efetuar um registro abaixo dos 15 minustos de tolerância.";
 									return false;
 								}
 							}
 
-							if ($Reason->descricao === "RETORNO") {
-
+							if ($Reason->descricao === "RETORNO")
+							{
 								if($RecordsNow = $dao->get("Records", "INNER JOIN reasons r ON r.id = records.reason_id WHERE records.reason_id = 2 AND records.user_id = ".$_SESSION['user_id']))
 								{
 									$interv = sub_time($Itinenary->retorno, $Itinenary->intervalo);
@@ -80,9 +84,19 @@
 									$varT = strtotime($sumTot);
 									$varS = strtotime($nowRet);
 									$rest = substr($interv, -7, 1);
-									if ($varS < $varT) {
+									/*if ($varT > $varS)
+									{
 										$MSG->error[] = "Seu tempo de intervalo e de  ".$rest." hora(s)";
 										$MSG->alert[] = "Voçê ainda tem ".$falta." de intervalo";
+										return false;
+									}*/
+
+									$inicio = new DateTime($sumTot);
+									$fim = new DateTime($nowRet);
+
+									if ($inicio->diff($fim)->format('%R') == '-' || $inicio->diff($fim)->format('%R') == '') {
+										$MSG->error[] = "Seu tempo de intervalo e de  ".$rest." hora(s)";
+										$MSG->alert[] = "Voçê ainda esta em horario de intervalo";
 										return false;
 									}
 								}
